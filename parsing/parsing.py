@@ -1,7 +1,7 @@
 import sys
 
 
-def check_file_exist():
+def check_arg_AND_file_exist():
     """Try to open 'config.txt' and read it."""
     if len(sys.argv) != 2:
         print("ONLY 2 ARGUMENT HERE NEGA")
@@ -26,4 +26,4 @@ def check_file_exist():
 
 
 if __name__ == "__main__":
-    check_file_exist()
+    check_arg_AND_file_exist()
