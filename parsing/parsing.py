@@ -4,6 +4,7 @@ import sys
 def check_arg_AND_file_exist():
     """Try to open 'config.txt' and read it."""
     """we try to check the error while doing that by the way"""
+    """we check argument error and all open error"""
     if len(sys.argv) != 2:
         print("ONLY 2 ARGUMENT HERE NEGA")
         sys.exit(1)
