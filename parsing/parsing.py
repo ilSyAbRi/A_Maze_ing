@@ -27,9 +27,18 @@ def check_arg_AND_file_exist():
         sys.exit(1)
 
 
-def check_valid_element(content):
+def return_content_as_lines(content):
     lines = content.split("\n")
-    config = {}
+    return lines
+
+
+def get_config_dict(lines):
+    """
+    Convert config file lines into a dictionary.
+    - Skip empty lines and comments
+    - Check '=' exists in each line
+    """
+    config_element = {}
 
     for line in lines:
         line = line.strip()
@@ -41,22 +50,30 @@ def check_valid_element(content):
         key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip()
-        config[key] = value
+        config_element[key] = value
+    return config_element
 
+
+def check_the_main_key_element(config_dict):
+    """
+    check mandatory key existence
+    """
     try:
-        width = config["WIDTH"]
-        height = config["HEIGHT"]
-        entry = config["ENTRY"]
-        exit_ = config["EXIT"]
-        output_file = config["OUTPUT_FILE"]
-        perfect = config["PERFECT"]
+        width = config_dict["WIDTH"]
+        height = config_dict["HEIGHT"]
+        entry = config_dict["ENTRY"]
+        exit_ = config_dict["EXIT"]
+        output_file = config_dict["OUTPUT_FILE"]
+        perfect = config_dict["PERFECT"]
     except KeyError as missing_key:
         print(f"Error: missing required key -> {missing_key}")
         sys.exit(1)
 
     print("All required keys found.")
-    return config
+
 
 if __name__ == "__main__":
     content = check_arg_AND_file_exist()
-    check_valid_element(content)
+    lines = return_content_as_lines(content)
+    ma_dict = get_config_dict(lines)
+    check_the_main_key_element(ma_dict)
