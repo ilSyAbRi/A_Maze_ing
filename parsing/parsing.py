@@ -139,8 +139,8 @@ if __name__ == "__main__":
     print("\n === Read file and return content whit the check of arg ===")
     print("     processing...")
     content = check_arg_AND_file_exist_AND_return_it()
-    print(" [File read successfully!]")
-    print(" [content of file returned successfuly!]")
+    print("     [File read successfully!]")
+    print("     [content of file returned successfuly!]")
     print("                                     ->  Done")
 
     print("\n === Make content i have into several lines ===")
