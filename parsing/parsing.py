@@ -18,7 +18,6 @@ def check_arg_AND_file_exist_AND_return_it():
     try:
         with open("config.txt", "r") as file:
             content = file.read()
-            print("File read successfully!")
             return content
     except FileNotFoundError:
         print("Error: config.txt file not found!")
@@ -67,6 +66,9 @@ def check_coordinates_in_range(
     """
     CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
+    if not (width >= 2) or not (height >= 2):
+        raise ValueError(f"width or height are too small :"
+                         f"width : {width} or height : {height} < 2")
     if not (0 <= entry_x < width) or not (0 <= entry_y < height):
         raise ValueError(f"ENTRY coordinates out of bounds"
                          f" -> {entry_x},{entry_y}")
@@ -122,15 +124,32 @@ def check_key_value_element(config_dict):
     except Exception as unknown:
         print(f"Other error: {unknown}")
         sys.exit(1)
-    print("first validation key value done")
 
 
 if __name__ == "__main__":
 
+    print("====== Start parsing ======")
+
+    print("\n === Read file and return content whit the check of arg ===")
+    print("     processing...")
     content = check_arg_AND_file_exist_AND_return_it()
+    print(" [File read successfully!]")
+    print(" [content of file returned successfuly!]")
+    print("                                     ->  Done")
 
+    print("\n === Make content i have into several lines ===")
+    print("     processing...")
     lines = return_content_as_lines(content)
+    print("                                     ->  Done")
 
+    print("\n === Make lines i have into key value dict ===")
+    print("     processing...")
     ma_dict = get_config_dict(lines)
+    print("                                     ->  Done")
 
+    print("\n === Check validation of key value i have ===")
+    print("     processing...")
     check_key_value_element(ma_dict)
+    print("                                     ->  Done")
+
+    print("\n       ****** parsing status : DONE ~")
