@@ -1,12 +1,15 @@
 import sys
 
-def check_arg_AND_file_exist():
+def check_arg_AND_file_exist_AND_return_it():
+
     """Try to open 'config.txt' and read it."""
     """we try to check the error while doing that by the way"""
     """we check argument error and all open error"""
     """just check the exist of file and arg as it should be (:"""
+    """return the file content also """
+
     if len(sys.argv) != 2:
-        print("ONLY 2 ARGUMENT HERE NEGA")
+        print("should be 2 argument")
         sys.exit(1)
     if sys.argv[1] != "config.txt":
         print("argv[1] : I AM NOT config.txt AND I SHOULD BE")
@@ -28,6 +31,9 @@ def check_arg_AND_file_exist():
 
 
 def return_content_as_lines(content):
+    """
+    split content into lines to work whit it as key value in the future
+    """
     lines = content.split("\n")
     return lines
 
@@ -56,8 +62,15 @@ def get_config_dict(lines):
 
 def check_the_main_key_element(config_dict):
     """
-    check mandatory key existence
+    check mandatory key existence and no extra key there
     """
+
+    REQUIRED_KEYS = {"WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"}
+
+    for key in config_dict:
+        if key not in REQUIRED_KEYS:
+            print(f"Error: extra key found -> {key}")
+            sys.exit(1)
     try:
         width = config_dict["WIDTH"]
         height = config_dict["HEIGHT"]
@@ -73,7 +86,11 @@ def check_the_main_key_element(config_dict):
 
 
 if __name__ == "__main__":
-    content = check_arg_AND_file_exist()
+
+    content = check_arg_AND_file_exist_AND_return_it()
+
     lines = return_content_as_lines(content)
+
     ma_dict = get_config_dict(lines)
+
     check_the_main_key_element(ma_dict)
