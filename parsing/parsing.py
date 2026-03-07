@@ -10,23 +10,23 @@ def check_arg_AND_file_exist_AND_return_it():
     """return the file content also """
 
     if len(sys.argv) != 2:
-        print("should be 2 argument")
+        print("\n Error: Argument should be == 2")
         sys.exit(1)
     if sys.argv[1] != "config.txt":
-        print("Error: expected config.txt as argument")
+        print("\nError: expected config.txt as argument")
         sys.exit(1)
     try:
         with open("config.txt", "r") as file:
             content = file.read()
             return content
     except FileNotFoundError:
-        print("Error: config.txt file not found!")
+        print("\nError: config.txt file not found!")
         sys.exit(1)
     except PermissionError:
-        print("Error: Permission denied for config.txt!")
+        print("\nError: Permission denied for config.txt!")
         sys.exit(1)
     except Exception as e:
-        print(f"Other error1: {e}")
+        print(f"\nOther error1: {e}")
         sys.exit(1)
 
 
@@ -51,7 +51,7 @@ def get_config_dict(lines):
         if not line or line.startswith("#"):
             continue
         if "=" not in line:
-            print(f"Error: line missing '=' -> {line}")
+            print(f"\nError: line missing '=' -> {line}")
             sys.exit(1)
         key, value = line.split("=", 1)
         key = key.strip()
@@ -67,8 +67,8 @@ def check_coordinates_in_range(
     CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
     if not (width >= 2) or not (height >= 2):
-        raise ValueError(f"width or height are too small :"
-                         f"width : {width} or height : {height} < 2")
+        raise ValueError("Check : 'width (and or) height' < 2")
+
     if not (0 <= entry_x < width) or not (0 <= entry_y < height):
         raise ValueError(f"ENTRY coordinates out of bounds"
                          f" -> {entry_x},{entry_y}")
@@ -89,7 +89,7 @@ def check_key_value_element(config_dict):
 
         for key in config_dict:
             if key not in REQUIRED_KEYS:
-                print(f"Error: extra key found -> {key}")
+                print(f"\nError: extra key found -> {key}")
                 sys.exit(1)
 
         width = int(config_dict["WIDTH"])
@@ -114,15 +114,21 @@ def check_key_value_element(config_dict):
         output_file = config_dict["OUTPUT_FILE"].strip()
         if not output_file:
             raise ValueError("OUTPUT_FILE cannot be empty")
+        if " " in output_file:
+            raise ValueError(f"OUTPUT_FILE must be a single name"
+                             f"without spaces -> {output_file}")
+        if not output_file.endswith(".txt"):
+            raise ValueError(f"OUTPUT_FILE must end with .txt "
+                             f"-> {output_file}")
 
     except KeyError as missing_key:
-        print(f"Error: missing required key -> {missing_key}")
+        print(f"\nError: missing required key -> {missing_key}")
         sys.exit(1)
     except ValueError as spongbob:
-        print(f"Error: {spongbob}")
+        print(f"\nError: {spongbob}")
         sys.exit(1)
     except Exception as unknown:
-        print(f"Other error: {unknown}")
+        print(f"\nOther error: {unknown}")
         sys.exit(1)
 
 
