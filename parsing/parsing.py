@@ -1,6 +1,5 @@
 import sys
 
-
 def check_arg_AND_file_exist():
     """Try to open 'config.txt' and read it."""
     """we try to check the error while doing that by the way"""
@@ -28,5 +27,22 @@ def check_arg_AND_file_exist():
         sys.exit(1)
 
 
+def check_valid_element():
+    lines = content.split("\n")
+    for line in lines:
+        line = line.strip()
+
+    if line.startswith("#"):
+        continue
+
+    key,value = line.split("=",1)
+    key = key.strip()
+    value = value.strip()
+
+    if not value.replace(" ", "").isdigit():
+            print(f"Error: invalid number in line -> {line}")
+            sys.exit(1)
+
 if __name__ == "__main__":
-    check_arg_AND_file_exist()
+    content = check_arg_AND_file_exist()
+    check_valid_element(content)
