@@ -1,7 +1,7 @@
 # spongebob
-WIDTH = 5
+WIDTH = 400
 HEIGHT=15
-ENTRY=4,0
-EXIT=0,0
+ENTRY=4,3
+exit=0,0
 OUTPUT_FILE= maze.txt  
-PERFECT=True
+PERFECT= false

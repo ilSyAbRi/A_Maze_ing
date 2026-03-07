@@ -54,8 +54,12 @@ def get_config_dict(lines):
             print(f"\nError: line missing '=' -> {line}")
             sys.exit(1)
         key, value = line.split("=", 1)
-        key = key.strip()
+        key = key.strip().upper()
         value = value.strip()
+        if key in config_element:
+            print(f"\nError: duplicate key found -> {key}")
+            sys.exit(1)
+
         config_element[key] = value
     return config_element
 
@@ -66,6 +70,8 @@ def check_coordinates_in_range(
     """
     CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
+    if not (width <= 400) or not (height <= 400):
+        raise ValueError("Check : 'width (and or) height' <= 400")
     if not (width >= 2) or not (height >= 2):
         raise ValueError("Check : 'width (and or) height' < 2")
 
