@@ -27,21 +27,35 @@ def check_arg_AND_file_exist():
         sys.exit(1)
 
 
-def check_valid_element():
+def check_valid_element(content):
     lines = content.split("\n")
+    config = {}
+
     for line in lines:
         line = line.strip()
-
-    if line.startswith("#"):
-        continue
-
-    key,value = line.split("=",1)
-    key = key.strip()
-    value = value.strip()
-
-    if not value.replace(" ", "").isdigit():
-            print(f"Error: invalid number in line -> {line}")
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            print(f"Error: line missing '=' -> {line}")
             sys.exit(1)
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        config[key] = value
+
+    try:
+        width = config["WIDTH"]
+        height = config["HEIGHT"]
+        entry = config["ENTRY"]
+        exit_ = config["EXIT"]
+        output_file = config["OUTPUT_FILE"]
+        perfect = config["PERFECT"]
+    except KeyError as missing_key:
+        print(f"Error: missing required key -> {missing_key}")
+        sys.exit(1)
+
+    print("All required keys found.")
+    return config
 
 if __name__ == "__main__":
     content = check_arg_AND_file_exist()
