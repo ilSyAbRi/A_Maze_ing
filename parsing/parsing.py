@@ -1,5 +1,6 @@
 import sys
 
+
 def check_arg_AND_file_exist_AND_return_it():
 
     """Try to open 'config.txt' and read it."""
@@ -12,7 +13,7 @@ def check_arg_AND_file_exist_AND_return_it():
         print("should be 2 argument")
         sys.exit(1)
     if sys.argv[1] != "config.txt":
-        print("argv[1] : I AM NOT config.txt AND I SHOULD BE")
+        print("Error: expected config.txt as argument")
         sys.exit(1)
     try:
         with open("config.txt", "r") as file:
@@ -26,7 +27,7 @@ def check_arg_AND_file_exist_AND_return_it():
         print("Error: Permission denied for config.txt!")
         sys.exit(1)
     except Exception as e:
-        print(f"Other error: {e}")
+        print(f"Other error1: {e}")
         sys.exit(1)
 
 
@@ -34,7 +35,7 @@ def return_content_as_lines(content):
     """
     split content into lines to work whit it as key value in the future
     """
-    lines = content.split("\n")
+    lines = content.splitlines()
     return lines
 
 
@@ -60,29 +61,68 @@ def get_config_dict(lines):
     return config_element
 
 
-def check_the_main_key_element(config_dict):
+def check_coordinates_in_range(
+        entry_x, entry_y, exit_x, exit_y, width, height
+        ):
     """
-    check mandatory key existence and no extra key there
+    CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
+    if not (0 <= entry_x < width) or not (0 <= entry_y < height):
+        raise ValueError(f"ENTRY coordinates out of bounds"
+                         f" -> {entry_x},{entry_y}")
 
-    REQUIRED_KEYS = {"WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"}
+    if not (0 <= exit_x < width) or not (0 <= exit_y < height):
+        raise ValueError(f"EXIT coordinates out of bounds"
+                         f"-> {exit_x},{exit_y}")
 
-    for key in config_dict:
-        if key not in REQUIRED_KEYS:
-            print(f"Error: extra key found -> {key}")
-            sys.exit(1)
+    if entry_x == exit_x and entry_y == exit_y:
+        raise ValueError("ENTRY and EXIT cannot be the same point")
+
+
+def check_key_value_element(config_dict):
     try:
-        width = config_dict["WIDTH"]
-        height = config_dict["HEIGHT"]
-        entry = config_dict["ENTRY"]
-        exit_ = config_dict["EXIT"]
-        output_file = config_dict["OUTPUT_FILE"]
-        perfect = config_dict["PERFECT"]
+
+        REQUIRED_KEYS = {"WIDTH", "HEIGHT", "ENTRY",
+                         "EXIT", "OUTPUT_FILE", "PERFECT"}
+
+        for key in config_dict:
+            if key not in REQUIRED_KEYS:
+                print(f"Error: extra key found -> {key}")
+                sys.exit(1)
+
+        width = int(config_dict["WIDTH"])
+        height = int(config_dict["HEIGHT"])
+
+        entry_x, entry_y = config_dict["ENTRY"].split(",")
+        entry_x = int(entry_x)
+        entry_y = int(entry_y)
+
+        exit_x, exit_y = config_dict["EXIT"].split(",")
+        exit_x = int(exit_x)
+        exit_y = int(exit_y)
+
+        check_coordinates_in_range(
+                entry_x, entry_y, exit_x, exit_y, width, height
+                )
+
+        perfect = config_dict["PERFECT"].lower()
+        if perfect not in ("true", "false"):
+            raise ValueError("PERFECT must be True or False")
+
+        output_file = config_dict["OUTPUT_FILE"].strip()
+        if not output_file:
+            raise ValueError("OUTPUT_FILE cannot be empty")
+
     except KeyError as missing_key:
         print(f"Error: missing required key -> {missing_key}")
         sys.exit(1)
-
-    print("All required keys found.")
+    except ValueError as spongbob:
+        print(f"Error: {spongbob}")
+        sys.exit(1)
+    except Exception as unknown:
+        print(f"Other error: {unknown}")
+        sys.exit(1)
+    print("first validation key value done")
 
 
 if __name__ == "__main__":
@@ -93,4 +133,4 @@ if __name__ == "__main__":
 
     ma_dict = get_config_dict(lines)
 
-    check_the_main_key_element(ma_dict)
+    check_key_value_element(ma_dict)
