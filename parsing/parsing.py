@@ -138,30 +138,13 @@ def check_key_value_element(config_dict):
         sys.exit(1)
 
 
-if __name__ == "__main__":
-
-    print("====== Start parsing ======")
-
-    print("\n === Read file and return content whit the check of arg ===")
-    print("     processing...")
+def main():
     content = check_arg_AND_file_exist_AND_return_it()
-    print("     [File read successfully!]")
-    print("     [content of file returned successfuly!]")
-    print("                                     ->  Done")
-
-    print("\n === Make content i have into several lines ===")
-    print("     processing...")
     lines = return_content_as_lines(content)
-    print("                                     ->  Done")
-
-    print("\n === Make lines i have into key value dict ===")
-    print("     processing...")
     ma_dict = get_config_dict(lines)
-    print("                                     ->  Done")
-
-    print("\n === Check validation of key value i have ===")
-    print("     processing...")
     check_key_value_element(ma_dict)
-    print("                                     ->  Done")
+    return ma_dict
 
-    print("\n       ****** parsing status : DONE ~")
+
+if __name__ == "__main__":
+    main()
