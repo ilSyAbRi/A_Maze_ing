@@ -1,7 +1,7 @@
 import sys
 
 
-def check_arg_AND_file_exist_AND_return_it():
+def check_arg_and_file_exist_and_return_it():
 
     """Try to open 'config.txt' and read it."""
     """we try to check the error while doing that by the way"""
@@ -138,8 +138,8 @@ def check_key_value_element(config_dict):
         sys.exit(1)
 
 
-def main():
-    content = check_arg_AND_file_exist_AND_return_it()
+def config_parser():
+    content = check_arg_and_file_exist_and_return_it()
     lines = return_content_as_lines(content)
     ma_dict = get_config_dict(lines)
     check_key_value_element(ma_dict)
@@ -147,4 +147,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    config_parser()
