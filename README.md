@@ -7,3 +7,5 @@ i start whit the parsing by checking if the file and argument are exist as they 
 
 ### check this in future
 remember to handle ctr c and ctr d in the future cause of you can t handle in the file of parsing
+
+### create good name for error
