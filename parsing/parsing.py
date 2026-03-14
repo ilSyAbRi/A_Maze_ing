@@ -20,10 +20,10 @@ def check_arg_and_file_exist_and_return_it():
             content = file.read()
             return content
     except FileNotFoundError:
-        print("\nError: config.txt file not found!")
+        print("\nwhere is the freking file")
         sys.exit(1)
     except PermissionError:
-        print("\nError: Permission denied for config.txt!")
+        print("\nPermesion bother")
         sys.exit(1)
     except Exception as e:
         print(f"\nOther error1: {e}")
@@ -70,7 +70,7 @@ def check_coordinates_in_range(
     """
     CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
-    if not (width <= 400) or not (height <= 400):
+    if not (width <= 383) or not (height <= 201):
         raise ValueError("Check : 'width (and or) height' <= 400")
     if not (width >= 2) or not (height >= 2):
         raise ValueError("Check : 'width (and or) height' < 2")
@@ -90,14 +90,6 @@ def check_coordinates_in_range(
 def check_key_value_element(config_dict):
     try:
 
-        REQUIRED_KEYS = {"WIDTH", "HEIGHT", "ENTRY",
-                         "EXIT", "OUTPUT_FILE", "PERFECT"}
-
-        for key in config_dict:
-            if key not in REQUIRED_KEYS:
-                print(f"\nError: extra key found -> {key}")
-                sys.exit(1)
-
         width = int(config_dict["WIDTH"])
         height = int(config_dict["HEIGHT"])
 
@@ -108,6 +100,11 @@ def check_key_value_element(config_dict):
         exit_x, exit_y = config_dict["EXIT"].split(",")
         exit_x = int(exit_x)
         exit_y = int(exit_y)
+
+        seed = config_dict.get("SEED")
+
+        if seed is not None:
+            int(seed)
 
         check_coordinates_in_range(
                 entry_x, entry_y, exit_x, exit_y, width, height
@@ -127,14 +124,14 @@ def check_key_value_element(config_dict):
             raise ValueError(f"OUTPUT_FILE must end with .txt "
                              f"-> {output_file}")
 
-    except KeyError as missing_key:
-        print(f"\nError: missing required key -> {missing_key}")
+    except KeyError:
+        print("\njust key error fuck you")
         sys.exit(1)
-    except ValueError as spongbob:
-        print(f"\nError: {spongbob}")
+    except ValueError:
+        print("\nError: spongbob")
         sys.exit(1)
-    except Exception as unknown:
-        print(f"\nOther error: {unknown}")
+    except Exception:
+        print("\nOther error: unknown")
         sys.exit(1)
 
 
@@ -143,6 +140,7 @@ def config_parser():
     lines = return_content_as_lines(content)
     ma_dict = get_config_dict(lines)
     check_key_value_element(ma_dict)
+    print(ma_dict)
     return ma_dict
 
 
