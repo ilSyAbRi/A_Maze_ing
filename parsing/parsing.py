@@ -125,7 +125,7 @@ def check_key_value_element(config_dict):
                              f"-> {output_file}")
 
     except KeyError:
-        print("\njust key error fuck you")
+        print("\njust key error")
         sys.exit(1)
     except ValueError:
         print("\nError: spongbob")
