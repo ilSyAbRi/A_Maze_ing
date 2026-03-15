@@ -92,19 +92,22 @@ def check_key_value_element(config_dict):
 
         width = int(config_dict["WIDTH"])
         height = int(config_dict["HEIGHT"])
+        config_dict["WIDTH"] = width
+        config_dict["HEIGHT"] = height
 
         entry_x, entry_y = config_dict["ENTRY"].split(",")
         entry_x = int(entry_x)
         entry_y = int(entry_y)
+        config_dict["ENTRY"] = (entry_x, entry_y)
 
         exit_x, exit_y = config_dict["EXIT"].split(",")
         exit_x = int(exit_x)
         exit_y = int(exit_y)
+        config_dict["EXIT"] = (exit_x, exit_y)
 
         seed = config_dict.get("SEED")
-
         if seed is not None:
-            int(seed)
+            config_dict["SEED"] = int(seed)
 
         check_coordinates_in_range(
                 entry_x, entry_y, exit_x, exit_y, width, height
@@ -140,7 +143,6 @@ def config_parser():
     lines = return_content_as_lines(content)
     ma_dict = get_config_dict(lines)
     check_key_value_element(ma_dict)
-    print(ma_dict)
     return ma_dict
 
 
