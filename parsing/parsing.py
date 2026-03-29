@@ -71,7 +71,7 @@ def check_coordinates_in_range(
     CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
     if not (width <= 383) or not (height <= 201):
-        raise ValueError("Check : 'width (and or) height' <= 400")
+        raise ValueError("Check : 'width (and or) height' <= 383 (or and) 201")
     if not (width >= 2) or not (height >= 2):
         raise ValueError("Check : 'width (and or) height' < 2")
 
@@ -121,20 +121,20 @@ def check_key_value_element(config_dict):
         if not output_file:
             raise ValueError("OUTPUT_FILE cannot be empty")
         if " " in output_file:
-            raise ValueError(f"OUTPUT_FILE must be a single name"
+            raise ValueError(f"OUTPUT_FILE must be a single name "
                              f"without spaces -> {output_file}")
         if not output_file.endswith(".txt"):
             raise ValueError(f"OUTPUT_FILE must end with .txt "
                              f"-> {output_file}")
 
-    except KeyError:
-        print("\njust key error")
+    except KeyError as ke:
+        print(f"\nkey error : {ke}")
         sys.exit(1)
-    except ValueError:
-        print("\nError: spongbob")
+    except ValueError as Va:
+        print(f"\nValueError: {Va}")
         sys.exit(1)
-    except Exception:
-        print("\nOther error: unknown")
+    except Exception as Ex:
+        print(f"\nException error: {Ex}")
         sys.exit(1)
 
 
