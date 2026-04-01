@@ -9,9 +9,10 @@ class Displayer:
         mlx = mlx_inst.mlx_init()
         adjust_width = 1920 // maze.width 
         adjust_height = 1080 // maze.height
-        cell_size = min(adjust_width, adjust_height)
+        cell_size = min(adjust_width, adjust_height) - 3
         win = mlx_inst.mlx_new_window(mlx, (maze.width * cell_size) + 10, (maze.height * cell_size) + 10, "A_Maze_Ing")
         Displayer.draw_grid(mlx_inst, mlx, win, maze, cell_size)
+        Displayer.draw_42(maze, mlx_inst, mlx, win)
         mlx_inst.mlx_loop(mlx)
 
     @staticmethod
@@ -44,3 +45,30 @@ class Displayer:
         end_y = start_y + cell_size
         for y in range(start_y, end_y):
             mlx_inst.mlx_pixel_put(mlx, win, start_x, y, 0xFFFFFFFF)  
+    
+    @staticmethod
+    def fill_cell(mlx_inst, mlx, win, x, y, cell_size):
+        start_x = x * cell_size
+        start_y = y * cell_size
+        for i in range(start_x + 1, start_x + cell_size):
+            for j in range(start_y + 1, start_y + cell_size):
+                mlx_inst.mlx_pixel_put(mlx, win, i, j, 0xFF0000FF)
+
+    @staticmethod
+    def draw_42(maze: Maze, mlx_inst, mlx, win):
+        center = (maze.width // 2, maze.height // 2)
+        lst4 = [
+            (center[0], center[1]), (center[0] - 1, center[1]), (center[0] - 2, center[1]),
+            (center[0] - 2, center[1] - 1), (center[0] - 2, center[1] - 2),
+            (center[0], center[1]), (center[0], center[1] + 1), (center[0], center[1] + 2)
+        ]
+        lst2 = [
+            (center[0] - 1, center[1] + 1), (center[0] - 1, center[1] + 2),
+            (center[0] - 2, center[1] + 1), (center[0] - 2, center[1] + 2)
+        ]
+        for x, y in lst4:
+            if 0 <= x < maze.width and 0 <= y < maze.height:
+                Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size - 3)
+        for x, y in lst2:
+            if 0 <= x < maze.width and 0 <= y < maze.height:
+                Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size)

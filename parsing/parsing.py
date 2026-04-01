@@ -135,8 +135,6 @@ def check_key_value_element(config_dict):
         sys.exit(1)
     except Exception as Ex:
         print(f"\nException error: {Ex}")
-        sys.exit(1)
-
 
 def config_parser():
     content = check_arg_and_file_exist_and_return_it()

@@ -1,7 +1,7 @@
 ENTRY = 0,0
-EXIT = 19,14
+EXIT = 344,14
 OUTPUT_FILE = output.txt
 PERFECT = True
-WIDTH = 40
+WIDTH = 50
 HEIGHT = 40
 #SEED = 3
