@@ -136,6 +136,7 @@ def check_key_value_element(config_dict):
     except Exception as Ex:
         print(f"\nException error: {Ex}")
 
+
 def config_parser():
     content = check_arg_and_file_exist_and_return_it()
     lines = return_content_as_lines(content)
@@ -145,4 +146,7 @@ def config_parser():
 
 
 if __name__ == "__main__":
-    config_parser()
+    try:
+        config_parser()
+    except Exception as e:
+        print(f"Error: {e}")
