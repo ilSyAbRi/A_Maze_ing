@@ -4,3 +4,4 @@ class Cell:
         self.east = True
         self.south = True
         self.west = True
+        self.visited = False

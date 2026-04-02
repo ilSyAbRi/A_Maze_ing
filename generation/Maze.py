@@ -15,4 +15,4 @@ class Maze:
         self.output_file = output_file
         self.perfect = perfect
         self.grid = [[ Cell() for _ in range(width)] for  _ in range(height)]
-        self.cell_size = Maze.calculate_cell_size(width, height)
+        self.cell_size = Maze.calculate_cell_size(width, height) - 10
