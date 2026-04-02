@@ -19,14 +19,14 @@ def check_arg_and_file_exist_and_return_it():
         with open("config.txt", "r") as file:
             content = file.read()
             return content
-    except FileNotFoundError:
-        print("\nwhere is the freking file")
+    except FileNotFoundError as e:
+        print(f"\nFile not found: {e}")
         sys.exit(1)
-    except PermissionError:
-        print("\nPermesion bother")
+    except PermissionError as e:
+        print(f"\nPermission error: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"\nOther error1: {e}")
+        print(f"\nException error1: {e}")
         sys.exit(1)
 
 
@@ -134,7 +134,7 @@ def check_key_value_element(config_dict):
         print(f"\nValueError: {Va}")
         sys.exit(1)
     except Exception as Ex:
-        print(f"\nException error: {Ex}")
+        print(f"\nException error2: {Ex}")
 
 
 def config_parser():
@@ -149,4 +149,4 @@ if __name__ == "__main__":
     try:
         config_parser()
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Exception error3: {e}")

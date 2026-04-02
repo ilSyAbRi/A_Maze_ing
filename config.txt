@@ -3,5 +3,5 @@ EXIT = 3,3
 OUTPUT_FILE = output.txt
 PERFECT = True
 WIDTH = 50
-HEIGHT = 50
+HEIGHT = 10
 #SEED = 3
