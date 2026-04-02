@@ -35,13 +35,13 @@ class Displayer:
     def draw_horizontal_wall(mlx_inst, mlx, win, start_x, start_y, cell_size):
         end_x = start_x + cell_size
         for x in range(start_x, end_x):
-            mlx_inst.mlx_pixel_put(mlx, win, x, start_y, 0xFFFFFFFF)
+            mlx_inst.mlx_pixel_put(mlx, win, x, start_y, 0xff0a9f2c)
     
     @staticmethod
     def draw_vertical_wall(mlx_inst, mlx, win, start_x, start_y, cell_size):
         end_y = start_y + cell_size
         for y in range(start_y, end_y):
-            mlx_inst.mlx_pixel_put(mlx, win, start_x, y, 0xFFFFFFFF) 
+            mlx_inst.mlx_pixel_put(mlx, win, start_x, y, 0xFF0a9f2c) 
     
     @staticmethod
     def fill_cell(mlx_inst, mlx, win, x, y, cell_size):
@@ -49,7 +49,7 @@ class Displayer:
         start_y = y * cell_size
         for i in range(start_x + 1, start_x + cell_size):
             for j in range(start_y + 1, start_y + cell_size):
-                mlx_inst.mlx_pixel_put(mlx, win, i, j, 0xFF0000FF)
+                mlx_inst.mlx_pixel_put(mlx, win, i, j, 0xFFB83F7D)
 
     @staticmethod
     def draw_42(mlx_inst, mlx, win, maze):
