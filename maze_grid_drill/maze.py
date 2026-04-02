@@ -1,3 +1,6 @@
+from generation.Cell import Cell
+from generation.Maze import Maze
+
 DIRECTIONS = {
     "N": (-1, 0),  # up
     "E": (0, 1),   # right
