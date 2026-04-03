@@ -31,7 +31,7 @@ class Maze:
         if x < self.height - 1 :
             if not self.grid[x + 1][y].visited:
                 neighbors.append((x + 1, y, "S"))
-        # lefth
+        # left
         if y > 0:
             if not self.grid[x][y - 1].visited:
                 neighbors.append((x, y - 1, "W"))
@@ -73,3 +73,4 @@ class Maze:
 
         self.path = path
         return path
+
