@@ -1,13 +1,13 @@
 ENTRY = 0,0
-EXIT = 3,3
+EXIT = 3,2
 OUTPUT_FILE = output.txt
 PERFECT = True
-<<<<<<< HEAD
+#<<<<<<< HEAD
 WIDTH = 50
-HEIGHT = 10
+HEIGHT = 103
 #SEED = 3
-=======
-WIDTH = 10
-HEIGHT = 19
+#=======
+#WIDTH = 10
+#HEIGHT = 19
 #SEED = 3
->>>>>>> generation
+#>>>>>>> generation
