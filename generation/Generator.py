@@ -1,23 +1,10 @@
 from generation.Maze import Maze
 import random
 
-
-class Cell:
-    def __init__(self):
-        self.north = True
-        self.east = True
-        self.south = True
-        self.west = True
-        self.visited = False
-
-
 class MazeGenerator:
     def __init__(self, maze: Maze):
         self.maze = maze
-        self.grid = maze.grid
-        self.width = maze.width
-        self.height = maze.height
-        self.entry = maze.entry
+
 
     def get_unvisited_neighbors(self, row, col):
         neighbors = []
@@ -43,28 +30,27 @@ class MazeGenerator:
         row, col = self.entry
         self.grid[row][col].visited = True
 
+        if neighbors:
+            if self.perfect.lower() == "true":
+                random.seed(self.seed)
         while stack:
             row, col = stack[-1]
             neighbors = self.get_unvisited_neighbors(row, col)
 
-            if neighbors:
-                if self.perfect.lower() == "true":
-                    random.seed(self.seed)
-                else:
-                    nx, ny, direction = random.choice(neighbors)
+            nx, ny, direction = random.choice(neighbors)
 
-                if direction == "N":
-                    self.grid[row][col].north = False
-                    self.grid[nx][ny].south = False
-                elif direction == "S":
-                    self.grid[row][col].south = False
-                    self.grid[nx][ny].north = False
-                elif direction == "E":
-                    self.grid[row][col].east = False
-                    self.grid[nx][ny].west = False
-                elif direction == "W":
-                    self.grid[row][col].west = False
-                    self.grid[nx][ny].east = False
+            if direction == "N":
+                self.grid[row][col].north = False
+                self.grid[nx][ny].south = False
+            elif direction == "S":
+                self.grid[row][col].south = False
+                self.grid[nx][ny].north = False
+            elif direction == "E":
+                self.grid[row][col].east = False
+                self.grid[nx][ny].west = False
+            elif direction == "W":
+                self.grid[row][col].west = False
+                self.grid[nx][ny].east = False
 
                 self.grid[nx][ny].visited = True
                 stack.append((nx, ny))
