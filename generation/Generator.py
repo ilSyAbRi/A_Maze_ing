@@ -3,6 +3,14 @@ import random
 
 
 class MazeGenerator:
+    def __init__(self, maze: Maze):
+        self.maze = maze
+        self.grid = maze.grid
+        self.width = maze.width
+        self.height = maze.height
+        #self.seed = maze.seed
+        self.entry = maze.entry
+        self.perfect = maze.perfect
 
     def get_unvisited_neighbors(self, row, col):
         neighbors = []
@@ -22,20 +30,21 @@ class MazeGenerator:
         return neighbors
 
     def generate_maze(self):
-        stack = [self.maze.entry]
-        path = [self.maze.entry]
+        stack = [self.entry]
+        path = [self.entry]
 
         row, col = self.entry 
-        self.maze.grid[row][col].visited = True
-        seed_value = self.seed()
-        if seed_value is not None:
-            random.seed(seed_value)
+        self.grid[row][col].visited = True
+        #seed_value = self.seed()
+        #if seed_value is not None:
+            #random.seed(seed_value)
         while stack:
             row, col = stack[-1]
             neighbors = self.get_unvisited_neighbors(row, col)
             if neighbors:
 
                 nx, ny, direction = random.choice(neighbors)
+                self.grid[nx][ny].visited = True
 
                 if direction == "N":
                     self.grid[row][col].north = False
@@ -50,10 +59,9 @@ class MazeGenerator:
                     self.grid[row][col].west = False
                     self.grid[nx][ny].east = False
 
-                    self.grid[nx][ny].visited = True
-                    stack.append((nx, ny))
-                    path.append((nx, ny))
-                else:
-                    stack.pop()
+                stack.append((nx, ny))
+                path.append((nx, ny))
+            else:
+                stack.pop()
 
         return path
