@@ -20,10 +20,10 @@ def check_arg_and_file_exist_and_return_it():
             content = file.read()
             return content
     except FileNotFoundError as e:
-        print(f"\nFile not found: {e}")
+        print(f"\nFile not found1: {e}")
         sys.exit(1)
     except PermissionError as e:
-        print(f"\nPermission error: {e}")
+        print(f"\nPermission error1: {e}")
         sys.exit(1)
     except Exception as e:
         print(f"\nException error1: {e}")
