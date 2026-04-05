@@ -1,10 +1,7 @@
 import sys
 from parsing.parsing import config_parser
-from generation.Display import Displayer
-from generation.Maze import Maze 
+from generation import MazeGenerator, Displayer, Maze 
 
-conf_dict = config_parser()
-
-
-
+maze = config_parser()
+MazeGenerator.generate_maze(maze)
 Displayer.display_maze(maze)

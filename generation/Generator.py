@@ -3,7 +3,7 @@ import random
 
 
 class MazeGenerator:
-
+    @staticmethod
     def get_unvisited_neighbors(maze, row, col):
         neighbors = []
 
@@ -21,6 +21,7 @@ class MazeGenerator:
 
         return neighbors
 
+    @staticmethod
     def generate_maze(maze):
         stack = [maze.entry]
         path = [maze.entry]
