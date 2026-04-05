@@ -49,7 +49,7 @@ class Displayer:
         start_y = y * cell_size
         for i in range(start_x + 1, start_x + cell_size):
             for j in range(start_y + 1, start_y + cell_size):
-                mlx_inst.mlx_pixel_put(mlx, win, i, j, 0xFFB83F7D)
+                mlx_inst.mlx_pixel_put(mlx, win, i, j, 0xFF4a0cde)
 
     @staticmethod
     def fill_42(mlx_inst, mlx, win, maze):

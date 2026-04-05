@@ -37,5 +37,3 @@ if __name__ == "__main__":
     # Print result
     print_maze(maze)
     print("\nDFS path:", path)
-    for y, row in enumerate(maze.grid):
-        
