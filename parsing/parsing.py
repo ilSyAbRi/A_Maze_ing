@@ -135,6 +135,18 @@ def check_key_value_element(config_dict):
         sys.exit(1)
     except Exception as Ex:
         print(f"\nException error2: {Ex}")
+        sys.exit(1)
+
+
+def check_entry_exit_42(entry, exit, lst1, lst2):
+    try:
+        if entry in lst1 or entry in lst2:
+            raise ValueError("entry in 42")
+        if exit in lst1 or exit in lst2:
+            raise ValueError("exit in 42")
+    except ValueError as EnEx42:
+        print("check 42:", EnEx42)
+        sys.exit(1)
 
 
 def config_parser():
@@ -146,10 +158,13 @@ def config_parser():
             width = ma_dict["WIDTH"],
             height = ma_dict["HEIGHT"],
             entry = ma_dict["ENTRY"],
-            exit = ma_dict["EXIT"], 
+            exit = ma_dict["EXIT"],
             output_file = ma_dict["OUTPUT_FILE"],
             perfect = ma_dict["PERFECT"]
     )
+    lst1, lst2 = maze.find_42()
+    check_entry_exit_42(maze.entry, maze.exit, lst1, lst2)
+
     maze.mark_42()
     return maze
 
@@ -159,3 +174,4 @@ if __name__ == "__main__":
         config_parser()
     except Exception as e:
         print(f"Exception error3: {e}")
+        sys.exit(1)
