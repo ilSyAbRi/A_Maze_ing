@@ -32,9 +32,10 @@ if __name__ == "__main__":
     maze = Maze(width, height, entry, _exit, output_file, perfect)
 
     # Generate maze
-    generator = MazeGenerator(maze)
-    path = generator.generate_maze()
+    path = MazeGenerator.generate_maze(maze)
 
     # Print result
     print_maze(maze)
     print("\nDFS path:", path)
+    for y, row in enumerate(maze.grid):
+        

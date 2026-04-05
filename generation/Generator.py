@@ -3,61 +3,53 @@ import random
 
 
 class MazeGenerator:
-    def __init__(self, maze: Maze):
-        self.maze = maze
-        self.grid = maze.grid
-        self.width = maze.width
-        self.height = maze.height
-        #self.seed = maze.seed
-        self.entry = maze.entry
-        self.perfect = maze.perfect
 
-    def get_unvisited_neighbors(self, row, col):
+    def get_unvisited_neighbors(maze, row, col):
         neighbors = []
 
-        if row > 0 and not self.grid[row - 1][col].visited:
+        if row > 0 and not maze.grid[row - 1][col].visited:
             neighbors.append((row - 1, col, "N"))
 
-        if row < self.height - 1 and not self.grid[row + 1][col].visited:
+        if row < maze.height - 1 and not maze.grid[row + 1][col].visited:
             neighbors.append((row + 1, col, "S"))
 
-        if col > 0 and not self.grid[row][col - 1].visited:
+        if col > 0 and not maze.grid[row][col - 1].visited:
             neighbors.append((row, col - 1, "W"))
 
-        if col < self.width - 1 and not self.grid[row][col + 1].visited:
+        if col < maze.width - 1 and not maze.grid[row][col + 1].visited:
             neighbors.append((row, col + 1, "E"))
 
         return neighbors
 
-    def generate_maze(self):
-        stack = [self.entry]
-        path = [self.entry]
+    def generate_maze(maze):
+        stack = [maze.entry]
+        path = [maze.entry]
 
-        row, col = self.entry 
-        self.grid[row][col].visited = True
-        #seed_value = self.seed()
+        row, col = maze.entry 
+        maze.grid[row][col].visited = True
+        #seed_value = maze.seed()
         #if seed_value is not None:
             #random.seed(seed_value)
         while stack:
             row, col = stack[-1]
-            neighbors = self.get_unvisited_neighbors(row, col)
+            neighbors = MazeGenerator.get_unvisited_neighbors(maze,row, col)
             if neighbors:
 
                 nx, ny, direction = random.choice(neighbors)
-                self.grid[nx][ny].visited = True
+                maze.grid[nx][ny].visited = True
 
                 if direction == "N":
-                    self.grid[row][col].north = False
-                    self.grid[nx][ny].south = False
+                    maze.grid[row][col].north = False
+                    maze.grid[nx][ny].south = False
                 elif direction == "S":
-                    self.grid[row][col].south = False
-                    self.grid[nx][ny].north = False
+                    maze.grid[row][col].south = False
+                    maze.grid[nx][ny].north = False
                 elif direction == "E":
-                    self.grid[row][col].east = False
-                    self.grid[nx][ny].west = False
+                    maze.grid[row][col].east = False
+                    maze.grid[nx][ny].west = False
                 elif direction == "W":
-                    self.grid[row][col].west = False
-                    self.grid[nx][ny].east = False
+                    maze.grid[row][col].west = False
+                    maze.grid[nx][ny].east = False
 
                 stack.append((nx, ny))
                 path.append((nx, ny))

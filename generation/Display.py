@@ -9,7 +9,7 @@ class Displayer:
         mlx = mlx_inst.mlx_init()
         win = mlx_inst.mlx_new_window(mlx, (maze.width * maze.cell_size) + 20, (maze.height * maze.cell_size) + 20, "A_Maze_Ing")
         Displayer.draw_grid(mlx_inst, mlx, win, maze, maze.cell_size)
-        Displayer.draw_42(mlx_inst, mlx, win, maze)
+        Displayer.fill_42(mlx_inst, mlx, win, maze)
         mlx_inst.mlx_loop(mlx)
 
     @staticmethod
@@ -52,31 +52,11 @@ class Displayer:
                 mlx_inst.mlx_pixel_put(mlx, win, i, j, 0xFFB83F7D)
 
     @staticmethod
-    def draw_42(mlx_inst, mlx, win, maze):
-        center = (maze.width // 2, maze.height // 2)
-        lst4 = [
-            (center[0] - 1, center[1]), (center[0] - 2, center[1]), (center[0] - 3, center[1]),
-            (center[0] - 3, center[1] - 1), (center[0] - 3, center[1] - 2),
-            (center[0] - 1, center[1] + 1), (center[0] -1, center[1] + 2)
-        ]
-        lst2 = [
-            (center[0] + 1, center[1]), (center[0] + 2, center[1]), (center[0] + 3, center[1]),
-            (center[0] + 3, center[1] - 1), (center[0] + 3, center[1] - 2), 
-            (center[0] + 3, center[1] - 2), 
-            (center[0] + 2, center[1] - 2) ,(center[0] + 1, center[1] - 2),
-            (center[0] + 1, center[1] + 1), (center[0] + 1, center[1] + 2),
-            (center[0] + 2, center[1] + 2) , (center[0] + 3 ,center[1] + 2)
-        ]
+    def fill_42(mlx_inst, mlx, win, maze):
+        lst2, lst4 = maze.find_42()
         for x, y in lst4:
             if 0 <= x < maze.width and 0 <= y < maze.height:
                 Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size)
         for x, y in lst2:
             if 0 <= x < maze.width and 0 <= y < maze.height:
                 Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size)
-        Displayer.mark_42(maze, lst4, lst2)
-    @staticmethod
-    def mark_42(maze: Maze, lst4, lst2):
-        for y, row in enumerate(maze.grid):
-            for x, cell in enumerate(row):
-                if (x,y) in lst4 or (x,y) in lst2:
-                    cell.visited = True

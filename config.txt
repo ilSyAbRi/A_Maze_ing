@@ -9,5 +9,6 @@ HEIGHT = 103
 #=======
 #WIDTH = 10
 #HEIGHT = 19
-#SEED = 3
+SEED = abc
+
 #>>>>>>> generation
