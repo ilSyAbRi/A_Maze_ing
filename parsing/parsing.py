@@ -1,5 +1,5 @@
 import sys
-
+from generation import Maze
 
 def check_arg_and_file_exist_and_return_it():
 
@@ -19,14 +19,14 @@ def check_arg_and_file_exist_and_return_it():
         with open("config.txt", "r") as file:
             content = file.read()
             return content
-    except FileNotFoundError:
-        print("\nwhere is the freking file")
+    except FileNotFoundError as e:
+        print(f"\nFile not found: {e}")
         sys.exit(1)
-    except PermissionError:
-        print("\nPermesion bother")
+    except PermissionError as e:
+        print(f"\nPermission error: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"\nOther error1: {e}")
+        print(f"\nException error1: {e}")
         sys.exit(1)
 
 
@@ -134,15 +134,28 @@ def check_key_value_element(config_dict):
         print(f"\nValueError: {Va}")
         sys.exit(1)
     except Exception as Ex:
-        print(f"\nException error: {Ex}")
+        print(f"\nException error2: {Ex}")
+
 
 def config_parser():
     content = check_arg_and_file_exist_and_return_it()
     lines = return_content_as_lines(content)
     ma_dict = get_config_dict(lines)
     check_key_value_element(ma_dict)
-    return ma_dict
+    maze = Maze(
+            width = ma_dict["WIDTH"],
+            height = ma_dict["HEIGHT"],
+            entry = ma_dict["ENTRY"],
+            exit = ma_dict["EXIT"], 
+            output_file = ma_dict["OUTPUT_FILE"],
+            perfect = ma_dict["PERFECT"]
+    )
+    maze.mark_42()
+    return maze
 
 
 if __name__ == "__main__":
-    config_parser()
+    try:
+        config_parser()
+    except Exception as e:
+        print(f"Exception error3: {e}")

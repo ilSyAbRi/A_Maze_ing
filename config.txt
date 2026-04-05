@@ -2,6 +2,12 @@ ENTRY = 0,0
 EXIT = 2,2
 OUTPUT_FILE = output.txt
 PERFECT = True
-WIDTH = 7
-HEIGHT = 5
+WIDTH = 10
+HEIGHT = 19
 #SEED = 3
+#=======
+#WIDTH = 10
+#HEIGHT = 19
+SEED = abc
+
+#>>>>>>> generation
