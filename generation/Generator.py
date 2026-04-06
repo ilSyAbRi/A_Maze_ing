@@ -60,16 +60,4 @@ class MazeGenerator:
                 path.append((nx, ny))
             else:
                 stack.pop()
-
         return path
-    """ 
-        if maze.perfect.lower() == "false":
-            row, col = maze.entry
-            neighbors = MazeGerator.get_unvisited_neighbors(maze,row,col)
-            x,y,direction = random.choice(neighbors)
-            check_direction(maze,row,col,direction,row + 1,col + 1,False)
-            row , col = maze.exit
-            neighbors = MazeGenerator.get_unvisited_neighbors(maze,row,col)
-            x, y, direction = random.choice(neighbors)
-            check_direction = random.choice(neighbors)
-    """
