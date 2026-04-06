@@ -3,6 +3,7 @@ import random
 
 
 class MazeGenerator:
+    DIRECTIONS: dict[str, tuple] = {'N': (0,-1) , 'S':(0, 1), 'E':(1, 0), 'W':(-1, 0)}
     @staticmethod
     def get_unvisited_neighbors(maze, row, col):
         neighbors = []
@@ -42,37 +43,7 @@ class MazeGenerator:
             maze.grid[nx][ny].east = False
 
 
-    def is_safe_to_break(maze,row_index,col_index):
 
-        if row_index >= maze.height or col_index >= maze.width:
-            return False
-
-        if row_index + 1 >= maze.height or col_index + 1>= maze.width:
-            return False
-
-        if row_index -1 >= 0 or col_index -1 >= 0:
-            return False
-
-        not_allowed_row , not_allowed_col = maze.find42()
-
-        if row_index in not_allowed_row and col_index in not_allowed_col:
-            return False
-
-        if row_index + 1 in not_allowed_row and col_index  in not_allowed_col:
-            return False
-
-        if row_index - 1 in not_allowed_row and col_index in not_allowed_col:
-            return False
-
-        if row_index in not_allowed_row and col_index +1 in not_allowed_col:
-            return False
-
-        if row_index in not_allowed_row and col_index -1 in not_allowed_col:
-            return False
-
-        return True
-
-        
     @staticmethod
     def generate_maze(maze):
         stack = [maze.entry]
@@ -94,23 +65,29 @@ class MazeGenerator:
                 stack.pop()
 
         if maze.perfect.lower() == "false":
-            wall_to_break = maze.height * maze.widht // 20
-            while Wall_to_break:
-                row_index = random.randint(0, maze.height - 1)
-                col_index = random.randint(0 , maze.widht - 1)
+            for x in range(maze.width):
+                for y in range(maze.height):
+                    maze.grid[x][y].visited = False
+            maze.mark_42()
+            
+            wall_to_break = maze.height * maze.width // 20
+            while wall_to_break:
+                row_index = random.randint(1, maze.height - 2)
+                col_index = random.randint(1, maze.width - 2)
+
 
                 cell = maze.grid[row_index][col_index]
-                walls = [cell.north, cell.south, cell.east, cell.west]
+                if cell.visited:
+                    continue
+                cell.visited = True
+                walls = ['N', 'S', 'E', 'W']
+                random.shuffle(walls)
+                for wall in walls:
+                    # check if there is a wall to break.. If there is at least one break it and return
+                    nx, ny = row_index + direction[wall][0], col_index + direction[wall][1]
+                    if (not maze.grid[nx][ny].visited and 0 < nx < maze.height and 0 < ny < maze.width):
+                        MazeGenerator.check_AND_break_direction(maze, row_index, col_index, wall, nx, ny)
+                        wall_to_break -= 1
 
-                if is_safe_to_break(maze,row_index, col_index) and walls.count(True) == 3:
-                    true_direction = []
-                    if cell.north: true_direction.append("N")
-                    if cell.south: true_direction.append("S")
-                    if cell.east:  true_direction.append("E")
-                    if cell.west:  true_direction.append("W")
-                    random_wall = random.choice(true_direction)
-                    check_AND_break_direction(cell,row,col,random_wall,row +1, col +1)
-
-                    Wall_to_break -= 1
 
         return path
