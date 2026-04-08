@@ -3,7 +3,6 @@ import random
 
 
 class MazeGenerator:
-    DIRECTIONS: dict[str, tuple] = {'N': (0,-1) , 'S':(0, 1), 'E':(1, 0), 'W':(-1, 0)}
     @staticmethod
     def get_unvisited_neighbors(maze, row, col):
         neighbors = []
@@ -63,7 +62,7 @@ class MazeGenerator:
                 path.append((nx, ny))
             else:
                 stack.pop()
-
+"""
         if maze.perfect.lower() == "false":
             for x in range(maze.width):
                 for y in range(maze.height):
@@ -72,8 +71,8 @@ class MazeGenerator:
             
             wall_to_break = maze.height * maze.width // 20
             while wall_to_break:
-                row_index = random.randint(1, maze.height - 2)
-                col_index = random.randint(1, maze.width - 2)
+                row_index = random.randint(2, maze.height - 2)
+                col_index = random.randint(2, maze.width - 2)
 
 
                 cell = maze.grid[row_index][col_index]
@@ -91,3 +90,4 @@ class MazeGenerator:
 
 
         return path
+        """
