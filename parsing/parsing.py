@@ -135,7 +135,6 @@ def check_key_value_element(config_dict):
         sys.exit(1)
     except Exception as Ex:
         print(f"\nException error2: {Ex}")
-        sys.exit(1)
 
 
 def check_entry_exit_42(entry, exit, lst1, lst2):
