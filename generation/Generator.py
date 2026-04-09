@@ -22,6 +22,20 @@ class MazeGenerator:
 
         return neighbors
 
+    @staticmethod
+    def mark_path_for_imperfect(maze):
+        for x in range(width -1):
+            for y in range(height -1):
+                maze.grid[x][y].visited = False
+        maze.mark_42()
+        for x in range(width -1):
+            maze.grid[x][height -1].visited = True
+
+        for y in range(height -1):
+            maze.grid[height -1][y].visite = True
+                
+
+
 
     @staticmethod
     def check_AND_break_direction(maze, row, col, direction, nx, ny):
