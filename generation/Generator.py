@@ -46,7 +46,7 @@ class MazeGenerator:
     @staticmethod
     def generate_maze(maze):
         stack = [maze.entry]
-        path = [maze.entry]
+        path = []
 
         row, col = maze.entry
         maze.grid[row][col].visited = True
@@ -59,9 +59,11 @@ class MazeGenerator:
                 maze.grid[nx][ny].visited = True
                 MazeGenerator.check_AND_break_direction(maze, row, col, direction, nx, ny)
                 stack.append((nx, ny))
-                path.append((nx, ny))
+                path.append((row, col,direction))
+
             else:
                 stack.pop()
+        return path
 """
         if maze.perfect.lower() == "false":
             for x in range(maze.width):
@@ -88,6 +90,4 @@ class MazeGenerator:
                         MazeGenerator.check_AND_break_direction(maze, row_index, col_index, wall, nx, ny)
                         wall_to_break -= 1
 
-
-        return path
-        """
+"""

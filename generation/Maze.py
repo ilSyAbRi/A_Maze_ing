@@ -1,6 +1,13 @@
 from generation.Cell import Cell
 import random
+from enum import Enum
 
+class Colors(Enum):
+    BLACK =  0xFF000000
+    GREEN =  0xff0a9f2c
+    PURPLE = 0xFF4a0cde
+    YELLOW = 0xFFFFD700
+    ORANGE = 0xFFFFA500
 
 class Maze:
     def __init__(self, width, height, entry, exit, output_file, perfect):
@@ -17,6 +24,8 @@ class Maze:
     def calculate_cell_size(width, height):
         adjust_width = 1920 // width 
         adjust_height = 1080 // height
+        if (width * height) < 100:
+            return min(adjust_width, adjust_height) - 40
         if (width * height) < 1000:
             return min(adjust_width, adjust_height) - 10
         if (width * height) < 5000:
@@ -46,3 +55,5 @@ class Maze:
             for x, cell in enumerate(row):
                 if (x,y) in lst4 or (x,y) in lst2:
                     cell.visited = True
+
+
