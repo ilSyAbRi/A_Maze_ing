@@ -7,4 +7,4 @@ PERFECT = false
 WIDTH = 30
 HEIGHT = 30
 
-#SEED = 3
+SEED = 3

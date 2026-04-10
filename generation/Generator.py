@@ -103,6 +103,9 @@ class MazeGenerator:
         row, col = maze.entry
         maze.grid[row][col].visited = True
 
+        if maze.seed is not None:
+            random.seed(maze.seed)
+
         while stack:
             row, col = stack[-1]
             neighbors = MazeGenerator.get_unvisited_neighbors(maze, row, col)
@@ -118,7 +121,7 @@ class MazeGenerator:
         if maze.perfect.lower() == "false":
 
             MazeGenerator.mark_path_for_imperfect(maze)
-            wall_to_break = maze.height * maze.width // 1
+            wall_to_break = maze.height * maze.width // 100
             while wall_to_break:
                 row = random.randint(0, maze.height - 1)
                 col = random.randint(0, maze.width - 1)

@@ -149,28 +149,34 @@ def check_entry_exit_42(entry, exit, lst1, lst2):
 
 
 def config_parser():
-    content = check_arg_and_file_exist_and_return_it()
-    lines = return_content_as_lines(content)
-    ma_dict = get_config_dict(lines)
-    check_key_value_element(ma_dict)
-    maze = Maze(
-            width = ma_dict["WIDTH"],
-            height = ma_dict["HEIGHT"],
-            entry = ma_dict["ENTRY"],
-            exit = ma_dict["EXIT"],
-            output_file = ma_dict["OUTPUT_FILE"],
-            perfect = ma_dict["PERFECT"]
-    )
-    lst1, lst2 = maze.find_42()
-    check_entry_exit_42(maze.entry, maze.exit, lst1, lst2)
-
-    maze.mark_42()
-    return maze
-
-
-if __name__ == "__main__":
     try:
-        config_parser()
+        content = check_arg_and_file_exist_and_return_it()
+        lines = return_content_as_lines(content)
+        ma_dict = get_config_dict(lines)
+        check_key_value_element(ma_dict)
+
+        width = ma_dict["WIDTH"]
+        height = ma_dict["HEIGHT"]
+        entry = ma_dict["ENTRY"]
+        exit = ma_dict["EXIT"]
+        output_file = ma_dict["OUTPUT_FILE"]
+        perfect = ma_dict["PERFECT"]
+        seed = ma_dict.get("SEED")
+
+        maze = Maze(
+                width,
+                height,
+                entry,
+                exit,
+                output_file,
+                seed,
+                perfect,
+        )
+        lst1, lst2 = maze.find_42()
+        check_entry_exit_42(maze.entry, maze.exit, lst1, lst2)
+
+        maze.mark_42()
+        return maze
     except Exception as e:
-        print(f"Exception error3: {e}")
+        print("who know:",e)
         sys.exit(1)
