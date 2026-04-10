@@ -1,40 +1,75 @@
 from generation.Maze import Maze
 import random
 
-
+#True mean 15 or close
+#False permession to access
 class MazeGenerator:
-    DIRECTIONS: dict[str, tuple] = {'N': (0,-1) , 'S':(0, 1), 'E':(1, 0), 'W':(-1, 0)}
     @staticmethod
     def get_unvisited_neighbors(maze, row, col):
         neighbors = []
 
-        if row > 0 and not maze.grid[row - 1][col].visited:
+        #UP
+        if row > 0 and  maze.grid[row - 1][col].visited:
             neighbors.append((row - 1, col, "N"))
-
-        if row < maze.height - 1 and not maze.grid[row + 1][col].visited:
+        #Down
+        if row < maze.height - 1 and  maze.grid[row + 1][col].visited:
             neighbors.append((row + 1, col, "S"))
-
-        if col > 0 and not maze.grid[row][col - 1].visited:
+        #Left
+        if col > 0 and maze.grid[row][col - 1].visited:
             neighbors.append((row, col - 1, "W"))
-
-        if col < maze.width - 1 and not maze.grid[row][col + 1].visited:
+        #Right
+        if col < maze.width - 1 and maze.grid[row][col + 1].visited:
             neighbors.append((row, col + 1, "E"))
 
         return neighbors
 
     @staticmethod
     def mark_path_for_imperfect(maze):
-        for x in range(width -1):
-            for y in range(height -1):
-                maze.grid[x][y].visited = False
-        maze.mark_42()
-        for x in range(width -1):
-            maze.grid[x][height -1].visited = True
 
-        for y in range(height -1):
-            maze.grid[height -1][y].visite = True
-                
+        # top row
+        for j in range(maze.width):
+            maze.grid[0][j].visited = False
 
+        # bottom row
+        for j in range(maze.width):
+            maze.grid[maze.height - 1][j].visited = False
+
+        # left column
+        for i in range(maze.height):
+            maze.grid[i][0].visited = False
+
+        # right column
+        for i in range(maze.height):
+            maze.grid[i][maze.width - 1].visited = False
+
+    @staticmethod
+    def check_cell_and_wall_for_imperfect(maze, row, col, next_row, next_col):
+
+        if maze.grid[next_row][next_col].visited == False:
+            return False
+        if maze.grid[row][col].visited == False:
+            return False
+
+        current_north = maze.grid[row][col].north
+        current_south = maze.grid[row][col].south
+        current_east = maze.grid[row][col].east
+        current_west = maze.grid[row][col].west
+
+        next_north = maze.grid[next_row][next_col].north
+        next_south = maze.grid[next_row][next_col].south
+        next_east = maze.grid[next_row][next_col].east
+        next_west = maze.grid[next_row][next_col].west
+
+        current_walls = [current_north, current_south, current_east, current_west]
+        next_walls = [next_north, next_south, next_east, next_west]
+
+        count_current_walls = current_walls.count(True)
+        count_next_walls = next_walls.count(True)
+
+        if count_current_walls > 1 and count_next_walls > 1:
+            return True
+        else:
+            return False
 
 
     @staticmethod
@@ -57,11 +92,10 @@ class MazeGenerator:
             maze.grid[nx][ny].east = False
 
 
-
     @staticmethod
     def generate_maze(maze):
         stack = [maze.entry]
-        path = [maze.entry]
+        path = []
 
         row, col = maze.entry
         maze.grid[row][col].visited = True
@@ -74,34 +108,23 @@ class MazeGenerator:
                 maze.grid[nx][ny].visited = True
                 MazeGenerator.check_AND_break_direction(maze, row, col, direction, nx, ny)
                 stack.append((nx, ny))
-                path.append((nx, ny))
+                path.append((row, col, direction))
             else:
                 stack.pop()
 
         if maze.perfect.lower() == "false":
-            for x in range(maze.width):
-                for y in range(maze.height):
-                    maze.grid[x][y].visited = False
-            maze.mark_42()
-            
+           
+            MazeGenerator.mark_path_for_imperfect(maze)
             wall_to_break = maze.height * maze.width // 20
             while wall_to_break:
-                row_index = random.randint(1, maze.height - 2)
-                col_index = random.randint(1, maze.width - 2)
-
-
-                cell = maze.grid[row_index][col_index]
-                if cell.visited:
-                    continue
-                cell.visited = True
-                walls = ['N', 'S', 'E', 'W']
-                random.shuffle(walls)
-                for wall in walls:
-                    # check if there is a wall to break.. If there is at least one break it and return
-                    nx, ny = row_index + direction[wall][0], col_index + direction[wall][1]
-                    if (not maze.grid[nx][ny].visited and 0 < nx < maze.height and 0 < ny < maze.width):
-                        MazeGenerator.check_AND_break_direction(maze, row_index, col_index, wall, nx, ny)
+                row = random.randint(1, maze.height - 2)
+                col = random.randint(1, maze.width - 2)
+                neighbors = MazeGenerator.get_unvisited_neighbors(maze, row, col)
+                if neighbors:
+                    nx, ny, direction = random.choice(neighbors)
+                    if MazeGenerator.check_cell_and_wall_for_imperfect(maze,row, col, nx, ny):
+                        MazeGenerator.check_AND_break_direction(maze, row, col, direction, nx, ny)
+                        path.append((row, col, direction))
                         wall_to_break -= 1
-
 
         return path

@@ -1,4 +1,10 @@
-from mlx import Mlx
+from enum import Enum
+class Colors(Enum):
+    GREEN =  0xff0a9f2c
+    PURPLE = 0xFF4a0cde
+    YELLOW = 0xFFFFD700
+    ORANGE = 0xFFFFA500
+
 def main():
     """Initializes MiniLibX, creates a window, draws a rectangle, and starts the event loop."""
 
@@ -37,4 +43,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    print(Colors[GREEN][])
