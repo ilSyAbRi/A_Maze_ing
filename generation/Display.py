@@ -127,8 +127,3 @@ class Displayer:
             for x in range(center_x - mouth_width // 2, center_x + mouth_width // 2):
                 if (x - center_x) ** 2 / (mouth_width // 2) ** 2 + (y - (center_y + eye_offset_y)) ** 2 / mouth_height ** 2 <= 1:
                     mlx_inst.mlx_pixel_put(mlx, win, x, y, Colors.BLACK.value)
-        
-
-
-
-        
