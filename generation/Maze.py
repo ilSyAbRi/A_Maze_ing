@@ -10,12 +10,13 @@ class Colors(Enum):
     ORANGE = 0xFFFFA500
 
 class Maze:
-    def __init__(self, width, height, entry, exit, output_file, perfect):
+    def __init__(self, width, height, entry, exit, output_file, seed, perfect):
         self.width = width
         self.height = height
         self.entry = entry
         self.exit = exit
         self.output_file = output_file
+        self.seed = seed
         self.perfect = perfect
         self.grid = [[ Cell() for _ in range(width)] for  _ in range(height)]
         self.cell_size = Maze.calculate_cell_size(width, height)

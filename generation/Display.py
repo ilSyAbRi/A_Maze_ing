@@ -64,7 +64,7 @@ class Displayer:
                 Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.PURPLE.value)
         for x, y in lst2:
             if 0 <= x < maze.width and 0 <= y < maze.height:
-                Displayer.fill_cell(mlx_instZZ, mlx, win, x, y, maze.cell_size, Colors.PURPLE.value)
+                Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.PURPLE.value)
 
     @staticmethod
     def animate(mlx_inst, mlx, win , path, maze):
@@ -95,7 +95,39 @@ class Displayer:
             i += 1
 
 
-    def entry_img(mlx_inst, mlx):
+    def draw_smiley_face(mlx_inst, mlx, win, maze):
+        center_x = (maze.width * maze.cell_size) // 2
+        center_y = (maze.height * maze.cell_size) // 2
+        radius = min(center_x, center_y) // 4
+
+        # Draw face
+        for y in range(center_y - radius, center_y + radius):
+            for x in range(center_x - radius, center_x + radius):
+                if (x - center_x) ** 2 + (y - center_y) ** 2 <= radius ** 2:
+                    mlx_inst.mlx_pixel_put(mlx, win, x, y, Colors.YELLOW.value)
+
+        # Draw eyes
+        eye_radius = radius // 5
+        eye_offset_x = radius // 2
+        eye_offset_y = radius // 3
+
+        for y in range(center_y - eye_offset_y - eye_radius, center_y - eye_offset_y + eye_radius):
+            for x in range(center_x - eye_offset_x - eye_radius, center_x - eye_offset_x + eye_radius):
+                if (x - (center_x - eye_offset_x)) ** 2 + (y - (center_y - eye_offset_y)) ** 2 <= eye_radius ** 2:
+                    mlx_inst.mlx_pixel_put(mlx, win, x, y, Colors.BLACK.value)
+
+            for x in range(center_x + eye_offset_x - eye_radius, center_x + eye_offset_x + eye_radius):
+                if (x - (center_x + eye_offset_x)) ** 2 + (y - (center_y - eye_offset_y)) ** 2 <= eye_radius ** 2:
+                    mlx_inst.mlx_pixel_put(mlx, win, x, y, Colors.BLACK.value)
+
+        # Draw mouth
+        mouth_width = radius
+        mouth_height = radius // 3
+        for y in range(center_y + eye_offset_y, center_y + eye_offset_y + mouth_height):
+            for x in range(center_x - mouth_width // 2, center_x + mouth_width // 2):
+                if (x - center_x) ** 2 / (mouth_width // 2) ** 2 + (y - (center_y + eye_offset_y)) ** 2 / mouth_height ** 2 <= 1:
+                    mlx_inst.mlx_pixel_put(mlx, win, x, y, Colors.BLACK.value)
+        
 
 
 

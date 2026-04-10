@@ -1,8 +1,7 @@
 from generation.Maze import Maze
 import random
 
-#True mean 15 or close
-#False permession to access
+
 class MazeGenerator:
     @staticmethod
     def get_unvisited_neighbors(maze, row, col):
@@ -32,27 +31,25 @@ class MazeGenerator:
 
         maze.mark_42()
 
-        # top row
+        # top row top wall
         for j in range(maze.width):
-            maze.grid[0][j].visited = True
+            maze.grid[0][j].north = True
 
-        # bottom row
+        # bottom row bottom wall
         for j in range(maze.width):
-            maze.grid[maze.height - 1][j].visited = True
+            maze.grid[maze.height - 1][j].south = True
 
-        # left column
+        # left column left wall
         for i in range(maze.height):
-            maze.grid[i][0].visited = True
+            maze.grid[i][0].west = True
 
-        # right column
+        # right column right wall
         for i in range(maze.height):
-            maze.grid[i][maze.width - 1].visited = True
+            maze.grid[i][maze.width - 1].east = True
 
     @staticmethod
     def check_cell_and_wall_for_imperfect(maze, row, col, next_row, next_col):
 
-        if maze.grid[next_row][next_col].visited == True:
-            return False
         if maze.grid[row][col].visited == True:
             return False
 
@@ -106,6 +103,9 @@ class MazeGenerator:
         row, col = maze.entry
         maze.grid[row][col].visited = True
 
+        if maze.seed is not None:
+            random.seed(maze.seed)
+
         while stack:
             row, col = stack[-1]
             neighbors = MazeGenerator.get_unvisited_neighbors(maze, row, col)
@@ -121,10 +121,10 @@ class MazeGenerator:
         if maze.perfect.lower() == "false":
 
             MazeGenerator.mark_path_for_imperfect(maze)
-            wall_to_break = maze.height * maze.width // 10
+            wall_to_break = maze.height * maze.width // 100
             while wall_to_break:
-                row = random.randint(1, maze.height - 2)
-                col = random.randint(1, maze.width - 2)
+                row = random.randint(0, maze.height - 1)
+                col = random.randint(0, maze.width - 1)
                 neighbors = MazeGenerator.get_unvisited_neighbors(maze, row, col)
                 if neighbors:
                     nx, ny, direction = random.choice(neighbors)
