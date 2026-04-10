@@ -64,7 +64,7 @@ class Displayer:
                 Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.PURPLE.value)
         for x, y in lst2:
             if 0 <= x < maze.width and 0 <= y < maze.height:
-                Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.PURPLE.value)
+                Displayer.fill_cell(mlx_instZZ, mlx, win, x, y, maze.cell_size, Colors.PURPLE.value)
 
     @staticmethod
     def animate(mlx_inst, mlx, win , path, maze):
@@ -79,7 +79,7 @@ class Displayer:
             if d == "E":
                 start_x += maze.cell_size
                 end_y = start_y + maze.cell_size
-                for y in range(start_y + 1, end_y):
+                for y in range(start_y, end_y):
                     mlx_inst.mlx_pixel_put(mlx, win, start_x, y, Colors.BLACK.value) 
             if d == "S":
                 start_y += maze.cell_size
@@ -88,8 +88,15 @@ class Displayer:
                     mlx_inst.mlx_pixel_put(mlx, win, x, start_y, Colors.BLACK.value)
             if d == "W":
                 end_y = start_y + maze.cell_size
-                for y in range(start_y + 1, end_y):
+                for y in range(start_y, end_y):
                     mlx_inst.mlx_pixel_put(mlx, win, start_x, y, Colors.BLACK.value) 
             if i % 2 == 0:
                 mlx_inst.mlx_do_sync(mlx)
             i += 1
+
+
+    def entry_img(mlx_inst, mlx):
+
+
+
+        

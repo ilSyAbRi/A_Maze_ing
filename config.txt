@@ -4,7 +4,7 @@ EXIT = 0,3
 OuTPUT_FILE = output.txt
 PERFECT = false
 		
-WIDTH = 30
+WIDTH = 29
 HEIGHT = 30
 
 #SEED = 3
