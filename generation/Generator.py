@@ -9,16 +9,16 @@ class MazeGenerator:
         neighbors = []
 
         #UP
-        if row > 0 and  maze.grid[row - 1][col].visited:
+        if row > 0 and not maze.grid[row - 1][col].visited:
             neighbors.append((row - 1, col, "N"))
         #Down
-        if row < maze.height - 1 and  maze.grid[row + 1][col].visited:
+        if row < maze.height - 1 and not maze.grid[row + 1][col].visited:
             neighbors.append((row + 1, col, "S"))
         #Left
-        if col > 0 and maze.grid[row][col - 1].visited:
+        if col > 0 and not maze.grid[row][col - 1].visited:
             neighbors.append((row, col - 1, "W"))
         #Right
-        if col < maze.width - 1 and maze.grid[row][col + 1].visited:
+        if col < maze.width - 1 and not maze.grid[row][col + 1].visited:
             neighbors.append((row, col + 1, "E"))
 
         return neighbors
@@ -117,10 +117,9 @@ class MazeGenerator:
                 path.append((row, col, direction))
             else:
                 stack.pop()
-        print(path)
 
         if maze.perfect.lower() == "false":
-           
+
             MazeGenerator.mark_path_for_imperfect(maze)
             wall_to_break = maze.height * maze.width // 10
             while wall_to_break:
@@ -133,5 +132,4 @@ class MazeGenerator:
                         MazeGenerator.check_AND_break_direction(maze, row, col, direction, nx, ny)
                         path.append((row, col, direction))
                         wall_to_break -= 1
-        print(path)
         return path
