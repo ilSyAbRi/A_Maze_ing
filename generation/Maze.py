@@ -54,6 +54,6 @@ class Maze:
         for y, row in enumerate(self.grid):
             for x, cell in enumerate(row):
                 if (x,y) in lst4 or (x,y) in lst2:
-                    cell.visited = False
+                    cell.visited = True
 
 

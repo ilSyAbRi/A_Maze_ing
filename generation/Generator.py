@@ -26,28 +26,34 @@ class MazeGenerator:
     @staticmethod
     def mark_path_for_imperfect(maze):
 
+        for i in range(maze.height):
+            for j in range(maze.width):
+                maze.grid[i][j].visited = False
+
+        maze.mark_42()
+
         # top row
         for j in range(maze.width):
-            maze.grid[0][j].visited = False
+            maze.grid[0][j].visited = True
 
         # bottom row
         for j in range(maze.width):
-            maze.grid[maze.height - 1][j].visited = False
+            maze.grid[maze.height - 1][j].visited = True
 
         # left column
         for i in range(maze.height):
-            maze.grid[i][0].visited = False
+            maze.grid[i][0].visited = True
 
         # right column
         for i in range(maze.height):
-            maze.grid[i][maze.width - 1].visited = False
+            maze.grid[i][maze.width - 1].visited = True
 
     @staticmethod
     def check_cell_and_wall_for_imperfect(maze, row, col, next_row, next_col):
 
-        if maze.grid[next_row][next_col].visited == False:
+        if maze.grid[next_row][next_col].visited == True:
             return False
-        if maze.grid[row][col].visited == False:
+        if maze.grid[row][col].visited == True:
             return False
 
         current_north = maze.grid[row][col].north
@@ -111,11 +117,12 @@ class MazeGenerator:
                 path.append((row, col, direction))
             else:
                 stack.pop()
+        print(path)
 
         if maze.perfect.lower() == "false":
            
             MazeGenerator.mark_path_for_imperfect(maze)
-            wall_to_break = maze.height * maze.width // 20
+            wall_to_break = maze.height * maze.width // 10
             while wall_to_break:
                 row = random.randint(1, maze.height - 2)
                 col = random.randint(1, maze.width - 2)
@@ -126,5 +133,5 @@ class MazeGenerator:
                         MazeGenerator.check_AND_break_direction(maze, row, col, direction, nx, ny)
                         path.append((row, col, direction))
                         wall_to_break -= 1
-
+        print(path)
         return path
