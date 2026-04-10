@@ -155,22 +155,14 @@ def config_parser():
         ma_dict = get_config_dict(lines)
         check_key_value_element(ma_dict)
 
-        width = ma_dict["WIDTH"]
-        height = ma_dict["HEIGHT"]
-        entry = ma_dict["ENTRY"]
-        exit = ma_dict["EXIT"]
-        output_file = ma_dict["OUTPUT_FILE"]
-        perfect = ma_dict["PERFECT"]
-        seed = ma_dict.get("SEED")
-
-        maze = Maze(
-                width,
-                height,
-                entry,
-                exit,
-                output_file,
-                seed,
-                perfect,
+        maze = Maze(        
+            width = ma_dict["WIDTH"],
+            height = ma_dict["HEIGHT"],
+            entry = ma_dict["ENTRY"],
+            exit = ma_dict["EXIT"],
+            output_file = ma_dict["OUTPUT_FILE"],
+            perfect = ma_dict["PERFECT"],
+            seed = ma_dict.get("SEED")
         )
         lst1, lst2 = maze.find_42()
         check_entry_exit_42(maze.entry, maze.exit, lst1, lst2)
