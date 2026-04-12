@@ -1,11 +1,11 @@
-ENTrY = 0,0
+ENTrY = 0,1
 
-EXIT = 8,6
+EXIT = 6,6
 OuTPUT_FILE = output.txt
 PERFECT = false
 		
-WIDTH = 38
+WIDTH = 20
 
 HEIGHT = 20
 
-#SEED = 3
+#SEED = 42
