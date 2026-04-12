@@ -42,6 +42,7 @@ class Displayer:
         for y, row in enumerate(maze.grid):
             for x, cell in enumerate(row):
                 Displayer.draw_cell(mlx_inst, mlx, win,x, y, cell, cell_size, maze.color)
+        # mlx_inst.mlx_do_sync(mlx, win)
 
     @staticmethod
     def draw_horizontal_wall(mlx_inst, mlx, win, start_x, start_y, cell_size, color):
@@ -242,15 +243,15 @@ class Displayer:
         Displayer.fill_42(mlx_inst, mlx, win, maze)
         path = MazeGenerator.generate_maze(maze)
         Displayer.animate(mlx_inst, mlx, win , path, maze)
+        mlx_inst.mlx_do_sync(mlx)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
-        # mlx_inst.mlx_do_sync(mlx)
+        mlx_inst.mlx_do_sync(mlx)
         Displayer.draw_ball(mlx_inst, mlx, win, maze, Colors.YELLOW.value)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)
         menu["1-option"] = False
 
     @staticmethod
     def quit_program(mlx_inst, mlx):
-        mlx_inst.mlx_loop_exit(mlx)
         mlx_inst.mlx_loop_exit(mlx)
         return 0
 
@@ -278,3 +279,6 @@ class Displayer:
             return True
         else:
             return False
+
+
+    # def 

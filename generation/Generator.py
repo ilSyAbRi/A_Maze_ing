@@ -45,19 +45,19 @@ class MazeGenerator:
     def return_to_true_mark(maze):
         # top row top wall
         for j in range(maze.width):
-            maze.grid[0][j].north = False
+            maze.grid[0][j].north = True
 
         # bottom row bottom wall
         for j in range(maze.width):
-            maze.grid[maze.height - 1][j].south = False
+            maze.grid[maze.height - 1][j].south = True
 
         # left column left wall
         for i in range(maze.height):
-            maze.grid[i][0].west = False
+            maze.grid[i][0].west = True
 
         # right column right wall
         for i in range(maze.height):
-            maze.grid[i][maze.width - 1].east = False
+            maze.grid[i][maze.width - 1].east = True
 
 
     @staticmethod
@@ -159,7 +159,7 @@ class MazeGenerator:
         if maze.perfect.lower() == "false":
 
             MazeGenerator.mark_path_for_imperfect(maze)
-            wall_to_break = maze.height * maze.width // 1
+            wall_to_break = maze.height * maze.width // 20
             numberoftry = 10000000000
             while wall_to_break and not numberoftry == 0:
                 row = random.randint(0, maze.height - 1)
