@@ -18,7 +18,8 @@ class Displayer:
         path = MazeGenerator.generate_maze(maze)
         MazeGenerator.solve_maze(maze)
         Displayer.animate(mlx_inst, mlx, win , path, maze)
-        Displayer.draw_ball(mlx_inst, mlx, win, maze, Colors.YELLOW.value)
+        y, x = maze.entry
+        Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         mlx_inst.mlx_loop(mlx)
@@ -104,16 +105,14 @@ class Displayer:
 
 
     @staticmethod
-    def draw_ball(mlx_inst, mlx, win, maze, color):
-        y, x = maze.entry
-        cell_size = maze.cell_size
+    def draw_ball(mlx_inst, mlx, win, x, y, cell_size):
         center_x = x * cell_size + cell_size // 2
         center_y = y * cell_size + cell_size // 2
-        radius = cell_size // 4
+        radius = cell_size // 3
         for i in range(center_x - radius, center_x + radius):
             for j in range(center_y - radius, center_y + radius):
                 if (i - center_x) ** 2 + (j - center_y) ** 2 <= radius ** 2:
-                    mlx_inst.mlx_pixel_put(mlx, win, i, j, color)
+                    mlx_inst.mlx_pixel_put(mlx, win, i, j, Colors.BLUE.value)
         mlx_inst.mlx_do_sync(mlx)
 
     @staticmethod
@@ -131,11 +130,10 @@ class Displayer:
 
     @staticmethod
     def draw_menu(mlx_inst, mlx, win, maze):
-        signal.signal(signal.SIGINT, signal.SIG_IGN)
         colors = [0xff0a9f2c, 0xFF102ade, 0xff0cdfa4, 0xffcb0cdf, 0xffdf0c1c, 0xff2a3ac7, 0xffe6e7f1]
         menu = {
             "1-option": False,
-            "2-option": False,
+            "2-option": 4,
             "3-option": False,
             "4-option": False
         }
@@ -166,7 +164,10 @@ class Displayer:
             if key == 49:
                 menu["1-option"] = True
             if key == 50:
-                menu["2-option"] = True
+                if menu["2-option"] == 4:
+                    menu["2-option"] = 1
+                else:
+                    menu["2-option"] = 2
             if key == 51:
                 menu["3-option"] = True
             if key == 52:
@@ -179,7 +180,10 @@ class Displayer:
             if Displayer.find_area((x, y),30, 210, 250, 60):
                 menu['1-option'] = True
             if Displayer.find_area((x, y), 30, 290, 250, 60):
-                menu['2-option'] = True
+                if menu["2-option"] == 4:
+                    menu["2-option"] = 1
+                else:
+                    menu["2-option"] = 2
             if Displayer.find_area((x, y), 30, 370, 250, 60):
                 menu['3-option'] = True
             if Displayer.find_area((x, y), 30, 450, 250, 60):
@@ -188,9 +192,10 @@ class Displayer:
         def on_loop(data: Any):
             if menu["1-option"] == True:
                 Displayer.regenerate(mlx_inst, mlx, win, maze, menu)
-            if menu["2-option"] == True:
-                Displayer.show_solve_path()
-                pass
+            if menu["2-option"] == 1:
+                Displayer.show_solve_path(mlx_inst, mlx, win, maze, menu)
+            if menu["2-option"] == 2:
+                Displayer.hide_path(mlx_inst, mlx, win, maze, menu)
             if menu["3-option"] == True:
                 maze.color = random.choice(colors)
                 Displayer.maze_switch_color(mlx_inst, mlx, win, maze, menu)
@@ -246,7 +251,8 @@ class Displayer:
         mlx_inst.mlx_do_sync(mlx)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         mlx_inst.mlx_do_sync(mlx)
-        Displayer.draw_ball(mlx_inst, mlx, win, maze, Colors.YELLOW.value)
+        y, x = maze.entry
+        Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)
         menu["1-option"] = False
 
@@ -281,5 +287,21 @@ class Displayer:
             return False
 
 
-    def show_solve_path():
-        
+    @staticmethod
+    def show_solve_path(mlx_inst, mlx, win, maze, menu):
+        path = MazeGenerator.solve_maze(maze)
+        for y, x, _ in path:
+            # Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.BLACK.value)
+            Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
+            mlx_inst.mlx_do_sync(mlx)
+            menu["2-option"] = 3
+        # menu["2-option"] = False
+
+    @staticmethod
+    def hide_path(mlx_inst, mlx, win, maze, menu):
+        path = MazeGenerator.solve_maze(maze)
+        for y, x, _ in path:
+            Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.BLACK.value)
+        y, x = maze.entry
+        Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
+        menu["2-option"] = 4

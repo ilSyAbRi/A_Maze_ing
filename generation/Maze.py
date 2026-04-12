@@ -9,6 +9,8 @@ class Colors(Enum):
     YELLOW = 0xFFFFD700
     ORANGE = 0xFFFFA500
     WHITE = 0XFe6dbdfF
+    BLUE = 0xff2b6cfb 
+    UNKNOWN = 0xffcb0cdf
 
 class Maze:
     def __init__(self, width, height, entry, exit, output_file, seed, perfect):
@@ -21,7 +23,7 @@ class Maze:
         self.perfect = perfect
         self.grid = [[ Cell() for _ in range(width)] for  _ in range(height)]
         self.cell_size = Maze.calculate_cell_size(width, height)
-        self.color = Colors.GREEN.value
+        self.color = Colors.UNKNOWN.value
 
     @staticmethod
     def calculate_cell_size(width, height):
