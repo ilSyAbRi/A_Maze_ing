@@ -16,6 +16,7 @@ class Displayer:
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         Displayer.fill_42(mlx_inst, mlx, win, maze)
         path = MazeGenerator.generate_maze(maze)
+        MazeGenerator.solve_maze(maze)
         Displayer.animate(mlx_inst, mlx, win , path, maze)
         Displayer.draw_ball(mlx_inst, mlx, win, maze, Colors.YELLOW.value)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)

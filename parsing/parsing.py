@@ -1,5 +1,5 @@
 import sys
-from generation import Maze
+from generation import Maze, MazeGenerator
 
 def check_arg_and_file_exist_and_return_it():
 
