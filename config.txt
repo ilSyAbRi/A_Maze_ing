@@ -1,4 +1,4 @@
-ENTrY = 0,0
+ENTrY = 0,1
 
 EXIT = 0,1
 OuTPUT_FILE = output.txt
@@ -8,4 +8,4 @@ WIDTH = 30
 
 HEIGHT = 30
 
-#SEED = 3
+#SEED = 42

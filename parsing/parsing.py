@@ -170,5 +170,5 @@ def config_parser():
         maze.mark_42()
         return maze
     except Exception as e:
-        print("who know:",e)
+        print("who knows:",e)
         sys.exit(1)
