@@ -182,6 +182,7 @@ class MazeGenerator:
     3. add to queue
     4. remember how we got there
     """
+    """
     @staticmethod
     def solve_maze(maze):
         start = maze.entry
@@ -201,4 +202,4 @@ class MazeGenerator:
                     visited.append(new)
                     queue.append(new)
                     came_from[new] = (current, direction)
-
+    """

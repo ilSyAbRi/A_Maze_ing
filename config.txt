@@ -2,7 +2,7 @@ ENTrY = 0,0
 
 EXIT = 0,1
 OuTPUT_FILE = output.txt
-PERFECT = false
+PERFECT = true
 		
 WIDTH = 30
 
