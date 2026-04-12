@@ -4,8 +4,8 @@ EXIT = 10,19
 OuTPUT_FILE = output.txt
 PERFECT = true
 		
-WIDTH = 20
+WIDTH = 0,1
 
-HEIGHT = 20
+HEIGHT = 0,8
 
 SEED = 42

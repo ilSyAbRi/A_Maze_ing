@@ -256,8 +256,5 @@ class MazeGenerator:
                 f.write(path_str + "\n")
 
         except Exception as e:
-            print("mini holy of ouput file", e)
-            sys.exit(1)
-        except BaseException as b:
-            print("the holy of ouput file", b)
+            print("generation file", e)
             sys.exit(1)

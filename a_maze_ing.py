@@ -9,10 +9,8 @@ try:
     MazeGenerator.generate_output_file(maze, path)
 
 except KeyboardInterrupt as e:
-    print("i am a key interrupt in main file:",)
+    print("main file",e)
     sys.exit(1)
 except Exception as d:
-    print("i am the mini honly of the main file:", d)
-except BaseException as b:
-    print("the holy of the main file:", b)
+    print("main file", d)
     sys.exit(1)

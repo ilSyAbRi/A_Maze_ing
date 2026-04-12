@@ -172,6 +172,3 @@ def config_parser():
     except Exception as e:
         print("who knows:", e)
         sys.exit(1)
-    except BaseException as d:
-        print("the holy baseException of parsing", d)
-        sys.exit(1)
