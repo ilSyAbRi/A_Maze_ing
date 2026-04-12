@@ -1,6 +1,5 @@
 ENTrY = 0,1
 
-
 EXIT = 0,2
 OuTPUT_FILE = output.txt
 PERFECT = false
