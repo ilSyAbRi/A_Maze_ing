@@ -159,7 +159,7 @@ class MazeGenerator:
         if maze.perfect.lower() == "false":
 
             MazeGenerator.mark_path_for_imperfect(maze)
-            wall_to_break = maze.height * maze.width // 1
+            wall_to_break = maze.height * maze.width // 20
             numberoftry = 10000000000
             while wall_to_break and not numberoftry == 0:
                 row = random.randint(0, maze.height - 1)
@@ -217,3 +217,33 @@ class MazeGenerator:
 
         path.reverse()
         return(path)
+
+    def from_bool_to_decimal(maze, row, col):
+        add = 0
+        if maze.grid[row][col].north:
+            add += 0b0001
+
+        if maze.grid[row][col].south:
+            add += 0b0010
+
+        if maze.grid[row][col].east:
+            add += 0b0100
+
+        if maze.grid[row][col].west:
+            add += 0b1000
+
+        return add
+
+    def generate_output_file(maze):
+
+        try:
+
+            maze_data = []
+
+            for i in range(maze.height):
+                for j in range(maze.width):
+                    append.maze_data(hex(from_bool_to_decimal(maze, i, j)))
+                with open(maze.output_file,"w") as f:
+                    f.write(maze_data)
+        except Exception as e:
+            print("error:", e)
