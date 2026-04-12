@@ -254,5 +254,10 @@ class MazeGenerator:
                 for _, _, direction in path:
                     path_str += direction
                 f.write(path_str + "\n")
+
         except Exception as e:
-            print(e)
+            print("mini holy of ouput file", e)
+            sys.exit(1)
+        except BaseException as b:
+            print("the holy of ouput file", b)
+            sys.exit(1)
