@@ -6,7 +6,6 @@ try:
     maze = config_parser()
     Displayer.display_maze(maze)
 except KeyboardInterrupt as e:
-    print("zakaria")
     sys.exit(1)
 except BaseException as b:
     sys.exit(1)
