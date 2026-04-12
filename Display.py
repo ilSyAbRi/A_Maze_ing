@@ -3,20 +3,20 @@ from mlx import Mlx
 from PIL import Image
 import inspect, os, random, signal
 from typing import Any, Dict
-from generation.Generator import MazeGenerator
-from generation.Maze import Maze, Colors
+from mazegen import MazeGenerator, Colors
+
 class Displayer:
 
     @staticmethod
-    def display_maze(maze: Maze):
+    def display_maze(maze: MazeGenerator):
         mlx_inst = Mlx()
         mlx = mlx_inst.mlx_init()
         win = mlx_inst.mlx_new_window(mlx, (maze.width * maze.cell_size) + 2, (maze.height * maze.cell_size) + 2, "A_Maze_Ing")
         menu_ptr = Displayer.draw_menu(mlx_inst, mlx, win, maze)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         Displayer.fill_42(mlx_inst, mlx, win, maze)
-        path = MazeGenerator.generate_maze(maze)
-        MazeGenerator.solve_maze(maze)
+        path = maze.generate_maze()
+        maze.solve_maze()
         Displayer.animate(mlx_inst, mlx, win , path, maze)
         y, x = maze.entry
         Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
@@ -246,7 +246,7 @@ class Displayer:
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         mlx_inst.mlx_do_sync(mlx)
         Displayer.fill_42(mlx_inst, mlx, win, maze)
-        path = MazeGenerator.generate_maze(maze)
+        path = maze.generate_maze()
         Displayer.animate(mlx_inst, mlx, win , path, maze)
         mlx_inst.mlx_do_sync(mlx)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
@@ -289,7 +289,7 @@ class Displayer:
 
     @staticmethod
     def show_solve_path(mlx_inst, mlx, win, maze, menu):
-        path = MazeGenerator.solve_maze(maze)
+        path = maze.solve_maze()
         for y, x, _ in path:
             # Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.BLACK.value)
             Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
@@ -299,7 +299,7 @@ class Displayer:
 
     @staticmethod
     def hide_path(mlx_inst, mlx, win, maze, menu):
-        path = MazeGenerator.solve_maze(maze)
+        path = maze.solve_maze()
         for y, x, _ in path:
             Displayer.fill_cell(mlx_inst, mlx, win, x, y, maze.cell_size, Colors.BLACK.value)
         y, x = maze.entry

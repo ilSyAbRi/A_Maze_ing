@@ -1,5 +1,5 @@
 import sys
-from generation import Maze, MazeGenerator
+from mazegen import MazeGenerator
 
 def check_arg_and_file_exist_and_return_it():
 
@@ -155,7 +155,7 @@ def config_parser():
         ma_dict = get_config_dict(lines)
         check_key_value_element(ma_dict)
 
-        maze = Maze(        
+        maze = MazeGenerator(        
             width = ma_dict["WIDTH"],
             height = ma_dict["HEIGHT"],
             entry = ma_dict["ENTRY"],
