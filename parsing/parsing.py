@@ -72,8 +72,8 @@ def check_coordinates_in_range(
     """
     if not (width <= 383) or not (height <= 201):
         raise ValueError("Check : 'width (and or) height' <= 383 (or and) 201")
-    if not (width >= 2) or not (height >= 2):
-        raise ValueError("Check : 'width (and or) height' < 2")
+    if not (width >= 9) or not (height >= 7):
+        raise ValueError("Check : 'width (and or) height' < 7 (and or) 9")
 
     if not (0 <= entry_x < width) or not (0 <= entry_y < height):
         raise ValueError(f"ENTRY coordinates out of bounds"
