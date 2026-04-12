@@ -196,9 +196,6 @@ class MazeGenerator:
             row, col = queue.pop(0)
             current = (row, col)
 
-            if current == end:
-                break
-
             neighbors = MazeGenerator.get_right_wall_neighbors(maze, row, col)
 
             for nx, ny, direction in neighbors:
@@ -208,6 +205,8 @@ class MazeGenerator:
                     visited.append(new)
                     queue.append(new)
                     came_from[new] = (current, direction)
+            if current == end:
+                break
 
         current = end
         while current != start:
@@ -217,7 +216,8 @@ class MazeGenerator:
 
         path.reverse()
         return(path)
-
+    
+    @staticmethod
     def from_bool_to_decimal(maze, row, col):
         add = 0
         if maze.grid[row][col].north:
@@ -234,16 +234,25 @@ class MazeGenerator:
 
         return add
 
-    def generate_output_file(maze):
-
+    def generate_output_file(maze, path):
         try:
+            with open(maze.output_file, "w") as f:
 
-            maze_data = []
+                for i in range(maze.height):
+                    line = ""
+                    for j in range(maze.width):
+                        value = MazeGenerator.from_bool_to_decimal(maze, i, j)
+                        line += format(value, "X")
+                    f.write(line + "\n")
 
-            for i in range(maze.height):
-                for j in range(maze.width):
-                    append.maze_data(hex(from_bool_to_decimal(maze, i, j)))
-                with open(maze.output_file,"w") as f:
-                    f.write(maze_data)
+                f.write("\n")
+
+                f.write(f"{maze.entry[0]}, {maze.entry[1]}\n")
+                f.write(f"{maze.exit[0]}, {maze.exit[1]}\n")
+
+                path_str = ""
+                for _, _, direction in path:
+                    path_str += direction
+                f.write(path_str + "\n")
         except Exception as e:
-            print("error:", e)
+            print(e)
