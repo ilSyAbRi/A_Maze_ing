@@ -182,7 +182,6 @@ class MazeGenerator:
     3. add to queue
     4. remember how we got there
     """
-    """
     @staticmethod
     def solve_maze(maze):
         start = maze.entry
@@ -190,16 +189,31 @@ class MazeGenerator:
 
         queue = [start]
         visited = [start]
+        came_from = {}
         path = []
 
         while queue:
             row, col = queue.pop(0)
-            current = (row,col)
-            neighbors = get_right_wall_neighbors(maze)
-            while nx, ny, direction in neighbors:
-                new = (nx, ny, direction)
+            current = (row, col)
+
+            if current == end:
+                break
+
+            neighbors = MazeGenerator.get_right_wall_neighbors(maze, row, col)
+
+            for nx, ny, direction in neighbors:
+                new = (nx, ny)
+
                 if new not in visited:
                     visited.append(new)
                     queue.append(new)
                     came_from[new] = (current, direction)
-    """
+
+        current = end
+        while current != start:
+            prev, direction = came_from[current]
+            path.append((prev[0], prev[1], direction))
+            current = prev
+
+        path.reverse()
+        return(path)
