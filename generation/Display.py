@@ -189,7 +189,7 @@ class Displayer:
             if menu["1-option"] == True:
                 Displayer.regenerate(mlx_inst, mlx, win, maze, menu)
             if menu["2-option"] == True:
-                # Displayer.show_solve_path()
+                Displayer.show_solve_path()
                 pass
             if menu["3-option"] == True:
                 maze.color = random.choice(colors)
@@ -281,4 +281,5 @@ class Displayer:
             return False
 
 
-    # def 
+    def show_solve_path():
+        
