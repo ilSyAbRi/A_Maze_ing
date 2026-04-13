@@ -6,7 +6,12 @@ try:
     Displayer.display_maze(maze)
     path = maze.solve_maze()
     maze.generate_output_file(path)
-except KeyboardInterrupt:
-    print("try exit button")
+except KeyboardInterrupt as g:
+    print(g)
+    sys.exit(1)
 except Exception as d:
     print(d)
+    sys.exit(1)
+except BaseException as e:
+    print(e)
+    sys.exit(1)

@@ -294,7 +294,7 @@ class MazeGenerator:
     def generate_output_file(self, path: list[Step]) -> None:
         """Write maze grid, points, and solution path to the output file."""
         try:
-            with open(self.output_file, "w", encoding="utf-8") as file:
+            with open(self.output_file, "w") as file:
                 for i in range(self.height):
                     line = ""
                     for j in range(self.width):

@@ -1,7 +1,7 @@
 ENTrY = 0,1
 
 EXIT = 9,9
-OuTPUT_FILE = config.txt
+OuTPUT_FILE = maze.txt
 PERFECT = true
 		
 WIDTH = 40
