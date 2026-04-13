@@ -1,5 +1,6 @@
-from parsing.parsing import config_parser
+from parsing import config_parser
 from Display import Displayer
+import sys
 
 try:
     maze = config_parser()

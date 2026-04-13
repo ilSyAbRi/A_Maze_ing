@@ -1,10 +1,8 @@
 import os
 import random
+import tkinter as tk
 from typing import Any
-
 from mlx import Mlx
-from PIL import Image
-
 from mazegen import Colors, MazeGenerator
 
 
@@ -368,7 +366,7 @@ class Displayer:
                 "4 - Exit",
             )
             mlx_inst.mlx_do_sync(mlx)
-            
+
             def on_key(key: int, _data: Any) -> int:
                 if key == 49:
                     menu["1-option"] = True
@@ -446,13 +444,44 @@ class Displayer:
 
     @staticmethod
     def resize_image_to_window(input_path: str, title: bool) -> str:
-        """Resize an image to title or menu dimensions and save it."""
-        img = Image.open(input_path)
-        img = img.resize((200, 150) if title else (600, 800))
-        base, ext = os.path.splitext(input_path)
-        output_path = f"{base}_fullscreen{ext}"
-        img.save(output_path)
-        return output_path
+        """Resize PNG using tkinter PhotoImage (standard library)."""
+        target_w, target_h = (200, 150) if title else (600, 800)
+        base, _ext = os.path.splitext(input_path)
+        suffix = "_title" if title else "_fullscreen"
+        output_path = f"{base}{suffix}.png"
+
+        if not os.path.isfile(input_path):
+            raise FileNotFoundError(f"Image not found: {input_path}")
+
+        root = tk.Tk()
+        root.withdraw()
+        try:
+            img = tk.PhotoImage(file=input_path)
+            src_w, src_h = img.width(), img.height()
+
+            def best_ratio(
+                    src: int,
+                    target: int,
+                    limit: int = 24
+                    ) -> tuple[int, int]:
+                best_zoom, best_sub = 1, 1
+                best_err = abs(src - target)
+                for zoom in range(1, limit + 1):
+                    for sub in range(1, limit + 1):
+                        size = (src * zoom) // sub
+                        err = abs(size - target)
+                        if err < best_err:
+                            best_zoom, best_sub, best_err = zoom, sub, err
+                return best_zoom, best_sub
+
+            zx, sx = best_ratio(src_w, target_w)
+            zy, sy = best_ratio(src_h, target_h)
+
+            resized = img.zoom(zx, zy).subsample(sx, sy)
+            resized.write(output_path, format="png")
+            return output_path
+        finally:
+            root.destroy()
 
     @staticmethod
     def draw_rectangle_border(

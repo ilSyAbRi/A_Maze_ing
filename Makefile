@@ -1,19 +1,32 @@
 PIP = pip
-
 PYTHON = python3
-
-
+FLAKE8 = flake8
+MYPY = mypy
+VENV := $(shell $(PYTHON) -c "import os; print(os.getenv('VIRTUAL_ENV') if os.getenv('VIRTUAL_ENV') else 'venv')")
+CONF_FILE = config.txt
+MAIN_FILE = a_maze_ing.py
+MLX_WHEEL = mlx-2.2-py3-none-any.whl
 
 install:
-	$(PIP) install 
+	$(PIP) install $(FLAKE8) $(MYPY)
+	$(PIP) install $(MLX_WHEEL)
 
 run:
-	$(PYTHON) a_maze_ing.py config.txt
+	$(PYTHON) $(MAIN_FILE) $(CONF_FILE)
 
 debug:
-	$(PYTHON) -m pdb a_maze_ing.py config.txt
+	$(PYTHON) -m pdb $(MAIN_FILE) $(CONF_FILE)
 
 clean:
-	find . -type f -name "*.pyc" 
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type d -name "mypy_cache" -exec rm -rf {} +
+lint: install
+	$(FLAKE8) . --exclude $(VENV)
+	$(MYPY) . \
+	--ignore-missing-imports \
+	--warn-return-any \
+	--warn-unused-ignores \
+	--disallow-untyped-defs \
+	--check-untyped-defs
 
-.PHONY: install run debug
+.PHONY: install run debug clean lint lint-strict
