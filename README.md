@@ -1,68 +1,53 @@
-*This project has been created as part of the 42 curriculum by ibet-lot, ilsyabri*
+# 🧩 A-Maze-ing
 
-# 🧩 A-Maze-ing — This is the way
+*This project has been created as part of the 42 curriculum by ibet-lot, ilsyabri*
 
 ## 📖 Description
 
-A-Maze-ing is a Python project that generates, solves, and visualizes mazes based on a configuration file.
+A-Maze-ing is a Python project that generates, solves, and visualizes mazes from a configuration file.
 
-The program:
-
-- Reads parameters from a configuration file
-- Generates a random maze (perfect or imperfect)
-- Ensures structural validity and constraints
-- Computes the shortest path from entry to exit
-- Outputs the maze in a hexadecimal encoded format
-- Displays a visual representation (ASCII or MLX)
-
-This project explores:
-
-- Graph theory (spanning trees)
-- Pathfinding algorithms (BFS)
-- Procedural generation
-- Clean and reusable software design
+It uses DFS for maze generation and BFS for solving the maze. The program supports perfect and imperfect mazes, outputs a formatted file, and can display the maze visually (ASCII or MLX).
 
 ---
 
 ## ⚙️ Instructions
 
-### 🔧 Installation
-
 ```bash
 make install
-```
-#### Or manually:
-```
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-### ▶️ Run the program
-```
 make run
 ```
-#### Or:
+or
 ```
 python3 a_maze_ing.py config.txt
 ```
-### 🐞 Debug mode
 ```
-make debug
-```
+📄 Config Format
 
-### 🧹 Clean project
+Each line is:
+
+KEY=VALUE
+
+Required:
+
+WIDTH
+HEIGHT
+ENTRY
+EXIT
+OUTPUT_FILE
+PERFECT
+
+Optional:
+
+SEED
 ```
-make clean
 ```
-### ✅ Linting
+📚 Features
+DFS maze generation
+BFS shortest path solving
+Perfect / imperfect maze support
+Hexadecimal wall output
+ASCII / MLX visualization
 ```
-make lint
-```
-#### Optional strict mode:
-```
-make lint-strict
-```👥 Team & Project Management
-Roles
-Member	Responsibilities
-ibet-lot	MLX graphical interface, maze rendering, solution rendering, animations (generation & solving), menu system, packaging, Makefile
-ilsyabri	Maze generation (DFS), solving algorithm (BFS), imperfect maze logic, output file, configuration parsing```
+AI Usage
+
+AI was used to understand concepts

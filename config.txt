@@ -4,8 +4,8 @@ EXIT = 9,9
 OuTPUT_FILE = maze.txt
 PERFECT = true
 		
-WIDTH = 383
+WIDTH = 20
 
-HEIGHT = 201
+HEIGHT = 20
 
 #SEED = 42
