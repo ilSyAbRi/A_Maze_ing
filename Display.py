@@ -28,9 +28,11 @@ class Displayer:
         path = maze.generate_maze()
         maze.solve_maze()
         Displayer.animate(mlx_inst, mlx, win, path, maze)
+        mlx_inst.mlx_do_sync(mlx)
         y, x = maze.entry
         Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)
+        mlx_inst.mlx_do_sync(mlx)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         mlx_inst.mlx_loop(mlx)
 
@@ -91,6 +93,8 @@ class Displayer:
                 Displayer.draw_cell(
                     mlx_inst, mlx, win, x, y, cell, cell_size, maze.color
                 )
+        mlx_inst.mlx_do_sync(mlx)
+
 
     @staticmethod
     def draw_horizontal_wall(
@@ -242,8 +246,8 @@ class Displayer:
         for i in range(start_x + 1, end_x):
             for j in range(start_y + 1, end_y):
                 if (
-                    (i - start_x) % (cell_size // 5) == 0
-                    or (j - start_y) % (cell_size // 3) == 0
+                    (i - start_x) % (cell_size // 9) >= 2
+                    or (j - start_y) % (cell_size // 3) >= 2
                 ):
                     mlx_inst.mlx_pixel_put(mlx, win, i, j, color)
 
@@ -432,7 +436,8 @@ class Displayer:
         def on_close(_data: Any) -> int:
             mlx_inst.mlx_loop_exit(mlx)
             return 0
-
+        
+        mlx_inst.mlx_do_sync(mlx)
         mlx_inst.mlx_hook(win, 33, 0, on_close, None)
         mlx_inst.mlx_key_hook(menu_ptr, on_key, None)
         mlx_inst.mlx_mouse_hook(menu_ptr, on_mouse, None)

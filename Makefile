@@ -1,2 +1,3 @@
+install:
+	$(PIP) install 
 debug:
-	
