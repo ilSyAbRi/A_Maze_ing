@@ -1,3 +1,3 @@
-from .Generator import Colors, MazeGenerator  # noqa: F401
+from .Generator import Colors, MazeGenerator
 
 __all__ = ["MazeGenerator", "Colors"]

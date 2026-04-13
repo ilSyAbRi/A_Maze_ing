@@ -11,13 +11,15 @@ Step = tuple[int, int, str]
 class Colors(Enum):
     """Define available RGBA color constants."""
     BLACK = 0xFF000000
-    GREEN = 0xFF0A9F2C
+    GREEN = 0xFF0CDFA4
     PURPLE = 0xFF4A0CDE
-    YELLOW = 0xFFFFD700
     ORANGE = 0xFFFFA500
-    WHITE = 0xFE6DBDFF
-    BLUE = 0xFF2B6CFB
+    BLUE = 0xFF7fceff
     PINK = 0xFFCB0CDF
+    RED = 0xFFDF0C1C
+    DARK_BLUE = 0xFF2A3AC7
+    WHITE = 0xFFE6E7F1
+    YELLOW = 0xFFFFD700
 
 
 class MazeGenerator:
@@ -224,7 +226,7 @@ class MazeGenerator:
         if self.perfect.lower() == "false":
             self.mark_path_for_imperfect()
             wall_to_break = self.height * self.width // 20
-            number_of_try = 10_000_000_000
+            number_of_try = 10000000000
             while wall_to_break and number_of_try != 0:
                 row = random.randint(0, self.height - 1)
                 col = random.randint(0, self.width - 1)

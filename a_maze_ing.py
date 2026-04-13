@@ -7,6 +7,6 @@ try:
     path = maze.solve_maze()
     maze.generate_output_file(path)
 except KeyboardInterrupt:
-    print("try exit button")
+    print("try exit button ilyass")
 except Exception as d:
     print(d)

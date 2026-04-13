@@ -156,7 +156,7 @@ def check_key_value_element(config_dict: dict[str, str]) -> ParsedConfig:
         print(f"\nkey error : {exc}")
         sys.exit(1)
     except ValueError as exc:
-        print(f"\nValueError: {exc}")
+        print(f"\n{exc}")
         sys.exit(1)
     except Exception as exc:
         print(f"\nException error2: {exc}")

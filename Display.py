@@ -28,12 +28,11 @@ class Displayer:
         path = maze.generate_maze()
         maze.solve_maze()
         Displayer.animate(mlx_inst, mlx, win, path, maze)
-        mlx_inst.mlx_do_sync(mlx)
         y, x = maze.entry
         Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)
-        mlx_inst.mlx_do_sync(mlx)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
+        mlx_inst.mlx_do_sync(mlx)
         mlx_inst.mlx_loop(mlx)
 
     @staticmethod
@@ -94,7 +93,6 @@ class Displayer:
                     mlx_inst, mlx, win, x, y, cell, cell_size, maze.color
                 )
         mlx_inst.mlx_do_sync(mlx)
-
 
     @staticmethod
     def draw_horizontal_wall(
@@ -250,6 +248,7 @@ class Displayer:
                     or (j - start_y) % (cell_size // 3) >= 2
                 ):
                     mlx_inst.mlx_pixel_put(mlx, win, i, j, color)
+        mlx_inst.mlx_do_sync(mlx)
 
     @staticmethod
     def draw_menu(
@@ -281,8 +280,8 @@ class Displayer:
                 "./assests/b_g.png", False
             )
             img_ptr, _, _ = mlx_inst.mlx_png_file_to_image(mlx, resized_img)
-            mlx_inst.mlx_put_image_to_window(mlx, menu_ptr, img_ptr, 0, 0)
-
+            mlx_inst.mlx_put_image_to_window(mlx, menu_ptr, img_ptr, -150, 0)
+            mlx_inst.mlx_do_sync(mlx)
             resized_tit = Displayer.resize_image_to_window(
                 "./assests/title.png", True
             )
@@ -292,7 +291,7 @@ class Displayer:
             mlx_inst.mlx_put_image_to_window(
                 mlx, menu_ptr, img_tit_ptr, 50, 10
                 )
-
+            mlx_inst.mlx_do_sync(mlx)
             Displayer.draw_rectangle_border(
                 mlx_inst,
                 mlx,
@@ -369,79 +368,81 @@ class Displayer:
                 "4 - Exit",
             )
             mlx_inst.mlx_do_sync(mlx)
+            
+            def on_key(key: int, _data: Any) -> int:
+                if key == 49:
+                    menu["1-option"] = True
+                if key == 50:
+                    menu["2-option"] = 1 if menu["2-option"] == 4 else 2
+                if key == 51:
+                    menu["3-option"] = True
+                if key == 52:
+                    menu["4-option"] = True
+                return 0
+
+            def on_mouse(
+                clicked: int, x: int, y: int, _data: Any
+            ) -> int:
+                if clicked != 1:
+                    return 0
+                mlx_inst.mlx_do_sync(mlx)
+                if Displayer.find_area((x, y), 30, 210, 250, 60):
+                    menu["1-option"] = True
+                if Displayer.find_area((x, y), 30, 290, 250, 60):
+                    menu["2-option"] = 1 if menu["2-option"] == 4 else 2
+                if Displayer.find_area((x, y), 30, 370, 250, 60):
+                    menu["3-option"] = True
+                if Displayer.find_area((x, y), 30, 450, 250, 60):
+                    menu["4-option"] = True
+                return 0
+
+            def on_loop(_data: Any) -> int:
+                try:
+                    if menu["1-option"]:
+                        Displayer.regenerate(mlx_inst, mlx, win, maze, menu)
+                    if menu["2-option"] == 1:
+                        Displayer.show_solve_path(
+                            mlx_inst,
+                            mlx,
+                            win,
+                            maze,
+                            menu,
+                        )
+                    if menu["2-option"] == 2:
+                        Displayer.hide_path(
+                            mlx_inst,
+                            mlx,
+                            win,
+                            maze,
+                            menu,
+                        )
+                    if menu["3-option"]:
+                        maze.color = random.choice(colors)
+                        Displayer.maze_switch_color(
+                            mlx_inst,
+                            mlx,
+                            win,
+                            maze,
+                            menu,
+                        )
+                    if menu["4-option"]:
+                        Displayer.quit_program(mlx_inst, mlx)
+                        menu["4-option"] = False
+                except KeyboardInterrupt:
+                    print("try exit button")
+                return 0
+
+            def on_close(_data: Any) -> int:
+                mlx_inst.mlx_loop_exit(mlx)
+                return 0
+            mlx_inst.mlx_hook(win, 33, 0, on_close, None)
+            mlx_inst.mlx_key_hook(menu_ptr, on_key, None)
+            mlx_inst.mlx_mouse_hook(menu_ptr, on_mouse, None)
+            mlx_inst.mlx_loop_hook(mlx, on_loop, None)
+            mlx_inst.mlx_do_sync(mlx)
         except KeyboardInterrupt:
             print("try exit button")
-            return
-
-        def on_key(key: int, _data: Any) -> int:
-            if key == 49:
-                menu["1-option"] = True
-            if key == 50:
-                menu["2-option"] = 1 if menu["2-option"] == 4 else 2
-            if key == 51:
-                menu["3-option"] = True
-            if key == 52:
-                menu["4-option"] = True
-            return 0
-
-        def on_mouse(
-            clicked: int, x: int, y: int, _data: Any
-        ) -> int:
-            if clicked != 1:
-                return 0
-            mlx_inst.mlx_do_sync(mlx)
-            if Displayer.find_area((x, y), 30, 210, 250, 60):
-                menu["1-option"] = True
-            if Displayer.find_area((x, y), 30, 290, 250, 60):
-                menu["2-option"] = 1 if menu["2-option"] == 4 else 2
-            if Displayer.find_area((x, y), 30, 370, 250, 60):
-                menu["3-option"] = True
-            if Displayer.find_area((x, y), 30, 450, 250, 60):
-                menu["4-option"] = True
-            return 0
-
-        def on_loop(_data: Any) -> int:
-            if menu["1-option"]:
-                Displayer.regenerate(mlx_inst, mlx, win, maze, menu)
-            if menu["2-option"] == 1:
-                Displayer.show_solve_path(
-                    mlx_inst,
-                    mlx,
-                    win,
-                    maze,
-                    menu,
-                )
-            if menu["2-option"] == 2:
-                Displayer.hide_path(
-                    mlx_inst,
-                    mlx,
-                    win,
-                    maze,
-                    menu,
-                )
-            if menu["3-option"]:
-                maze.color = random.choice(colors)
-                Displayer.maze_switch_color(
-                    mlx_inst,
-                    mlx,
-                    win,
-                    maze,
-                    menu,
-                )
-            if menu["4-option"]:
-                Displayer.quit_program(mlx_inst, mlx)
-                menu["4-option"] = False
-            return 0
-
-        def on_close(_data: Any) -> int:
-            mlx_inst.mlx_loop_exit(mlx)
-            return 0
-        
-        mlx_inst.mlx_do_sync(mlx)
-        mlx_inst.mlx_hook(win, 33, 0, on_close, None)
-        mlx_inst.mlx_key_hook(menu_ptr, on_key, None)
-        mlx_inst.mlx_mouse_hook(menu_ptr, on_mouse, None)
-        mlx_inst.mlx_loop_hook(mlx, on_loop, None)
+        return
 
     @staticmethod
     def resize_image_to_window(input_path: str, title: bool) -> str:
@@ -576,4 +577,5 @@ class Displayer:
             )
         y, x = maze.entry
         Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
+        mlx_inst.mlx_do_sync(mlx)
         menu["2-option"] = 4
