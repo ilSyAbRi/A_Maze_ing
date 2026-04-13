@@ -1,8 +1,8 @@
 ENTrY = 0,0
 
-EXIT = 39,39
-OuTPUT_FILE = output.txt
-PERFECT = falSe
+EXIT = 9,9
+OuTPUT_FILE = maze.txt
+PERFECT = true
 		
 WIDTH = 383
 
