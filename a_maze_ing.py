@@ -5,8 +5,6 @@ import sys
 try:
     maze = config_parser()
     Displayer.display_maze(maze)
-    path = maze.solve_maze()
-    maze.generate_output_file(path)
 except KeyboardInterrupt as g:
     print(g)
     sys.exit(1)

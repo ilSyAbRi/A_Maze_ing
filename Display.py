@@ -23,9 +23,10 @@ class Displayer:
         Displayer.draw_menu(mlx_inst, mlx, win, maze)
         Displayer.draw_grid(mlx_inst, mlx, win, maze)
         Displayer.fill_42(mlx_inst, mlx, win, maze)
-        path = maze.generate_maze()
-        maze.solve_maze()
-        Displayer.animate(mlx_inst, mlx, win, path, maze)
+        path_gen = maze.generate_maze()
+        Displayer.animate(mlx_inst, mlx, win, path_gen, maze)
+        solved_path = maze.solve_maze()
+        maze.generate_output_file(solved_path)
         y, x = maze.entry
         Displayer.draw_ball(mlx_inst, mlx, win, x, y, maze.cell_size)
         Displayer.draw_gate(mlx_inst, mlx, win, maze, Colors.WHITE.value)
