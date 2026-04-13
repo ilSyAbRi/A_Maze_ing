@@ -226,7 +226,7 @@ class MazeGenerator:
         if self.perfect.lower() == "false":
             self.mark_path_for_imperfect()
             wall_to_break = self.height * self.width // 20
-            number_of_try = 10000000000
+            number_of_try = self.width * self.height * 3
             while wall_to_break and number_of_try != 0:
                 row = random.randint(0, self.height - 1)
                 col = random.randint(0, self.width - 1)

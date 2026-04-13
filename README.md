@@ -1,11 +1,68 @@
-# A_Maze_ing
+*This project has been created as part of the 42 curriculum by ibet-lot, ilsyabri*
 
-## parsing
+# 🧩 A-Maze-ing — This is the way
 
-#### check exist of the file and arg
-i start whit the parsing by checking if the file and argument are exist as they should be exist and ready for use in the future
+## 📖 Description
 
-### check this in future
-remember to handle ctr c and ctr d in the future cause of you can t handle in the file of parsing
+A-Maze-ing is a Python project that generates, solves, and visualizes mazes based on a configuration file.
 
-### check if seed exist after pefect is true
+The program:
+
+- Reads parameters from a configuration file
+- Generates a random maze (perfect or imperfect)
+- Ensures structural validity and constraints
+- Computes the shortest path from entry to exit
+- Outputs the maze in a hexadecimal encoded format
+- Displays a visual representation (ASCII or MLX)
+
+This project explores:
+
+- Graph theory (spanning trees)
+- Pathfinding algorithms (BFS)
+- Procedural generation
+- Clean and reusable software design
+
+---
+
+## ⚙️ Instructions
+
+### 🔧 Installation
+
+```bash
+make install
+```
+#### Or manually:
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+### ▶️ Run the program
+```
+make run
+```
+#### Or:
+```
+python3 a_maze_ing.py config.txt
+```
+### 🐞 Debug mode
+```
+make debug
+```
+
+### 🧹 Clean project
+```
+make clean
+```
+### ✅ Linting
+```
+make lint
+```
+#### Optional strict mode:
+```
+make lint-strict
+```👥 Team & Project Management
+Roles
+Member	Responsibilities
+ibet-lot	MLX graphical interface, maze rendering, solution rendering, animations (generation & solving), menu system, packaging, Makefile
+ilsyabri	Maze generation (DFS), solving algorithm (BFS), imperfect maze logic, output file, configuration parsing```
