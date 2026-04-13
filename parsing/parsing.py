@@ -1,14 +1,22 @@
 import sys
-from mazegen import MazeGenerator
+from typing import TypedDict
 
-def check_arg_and_file_exist_and_return_it():
+from mazegen.Generator import MazeGenerator
 
+
+class ParsedConfig(TypedDict):
+    """Store validated config values with concrete runtime types."""
+    WIDTH: int
+    HEIGHT: int
+    ENTRY: tuple[int, int]
+    EXIT: tuple[int, int]
+    OUTPUT_FILE: str
+    PERFECT: str
+    SEED: int | None
+
+
+def check_arg_and_file_exist_and_return_it() -> str:
     """Try to open 'config.txt' and read it."""
-    """we try to check the error while doing that by the way"""
-    """we check argument error and all open error"""
-    """just check the exist of file and arg as it should be (:"""
-    """return the file content also """
-
     if len(sys.argv) != 2:
         print("\n Error: Argument should be == 2")
         sys.exit(1)
@@ -16,21 +24,21 @@ def check_arg_and_file_exist_and_return_it():
         print("\nError: expected config.txt as argument")
         sys.exit(1)
     try:
-        with open("config.txt", "r") as file:
+        with open("config.txt", "r", encoding="utf-8") as file:
             content = file.read()
             return content
-    except FileNotFoundError as e:
-        print(f"\nFile not found1: {e}")
+    except FileNotFoundError as exc:
+        print(f"\nFile not found1: {exc}")
         sys.exit(1)
-    except PermissionError as e:
-        print(f"\nPermission error1: {e}")
+    except PermissionError as exc:
+        print(f"\nPermission error1: {exc}")
         sys.exit(1)
-    except Exception as e:
-        print(f"\nException error1: {e}")
+    except Exception as exc:
+        print(f"\nException error1: {exc}")
         sys.exit(1)
 
 
-def return_content_as_lines(content):
+def return_content_as_lines(content: str) -> list[str]:
     """
     split content into lines to work whit it as key value in the future
     """
@@ -38,13 +46,13 @@ def return_content_as_lines(content):
     return lines
 
 
-def get_config_dict(lines):
+def get_config_dict(lines: list[str]) -> dict[str, str]:
     """
     Convert config file lines into a dictionary.
     - Skip empty lines and comments
     - Check '=' exists in each line
     """
-    config_element = {}
+    config_element: dict[str, str] = {}
 
     for line in lines:
         line = line.strip()
@@ -65,8 +73,13 @@ def get_config_dict(lines):
 
 
 def check_coordinates_in_range(
-        entry_x, entry_y, exit_x, exit_y, width, height
-        ):
+    entry_x: int,
+    entry_y: int,
+    exit_x: int,
+    exit_y: int,
+    width: int,
+    height: int,
+) -> None:
     """
     CHECK (: ENTRY and EXIT coordinates are inside the grid and not equal
     """
@@ -76,42 +89,39 @@ def check_coordinates_in_range(
         raise ValueError("Check : 'width (and or) height' < 7 (and or) 9")
 
     if not (0 <= entry_x < width) or not (0 <= entry_y < height):
-        raise ValueError(f"ENTRY coordinates out of bounds"
-                         f" -> {entry_x},{entry_y}")
+        raise ValueError(
+            f"ENTRY coordinates out of bounds -> {entry_x},{entry_y}"
+        )
 
     if not (0 <= exit_x < width) or not (0 <= exit_y < height):
-        raise ValueError(f"EXIT coordinates out of bounds"
-                         f"-> {exit_x},{exit_y}")
+        raise ValueError(f"EXIT coordinates out of bounds-> {exit_x},{exit_y}")
 
     if entry_x == exit_x and entry_y == exit_y:
         raise ValueError("ENTRY and EXIT cannot be the same point")
 
 
-def check_key_value_element(config_dict):
+def check_key_value_element(config_dict: dict[str, str]) -> ParsedConfig:
+    """Validate config values and return a typed normalized mapping."""
     try:
-
         width = int(config_dict["WIDTH"])
         height = int(config_dict["HEIGHT"])
-        config_dict["WIDTH"] = width
-        config_dict["HEIGHT"] = height
 
-        entry_x, entry_y = config_dict["ENTRY"].split(",")
-        entry_x = int(entry_x)
-        entry_y = int(entry_y)
-        config_dict["ENTRY"] = (entry_x, entry_y)
+        entry_x_str, entry_y_str = config_dict["ENTRY"].split(",")
+        entry_x = int(entry_x_str)
+        entry_y = int(entry_y_str)
+        entry = (entry_x, entry_y)
 
-        exit_x, exit_y = config_dict["EXIT"].split(",")
-        exit_x = int(exit_x)
-        exit_y = int(exit_y)
-        config_dict["EXIT"] = (exit_x, exit_y)
+        exit_x_str, exit_y_str = config_dict["EXIT"].split(",")
+        exit_x = int(exit_x_str)
+        exit_y = int(exit_y_str)
+        exit_ = (exit_x, exit_y)
 
-        seed = config_dict.get("SEED")
-        if seed is not None:
-            config_dict["SEED"] = int(seed)
+        seed_raw = config_dict.get("SEED")
+        seed = int(seed_raw) if seed_raw is not None else None
 
         check_coordinates_in_range(
-                entry_x, entry_y, exit_x, exit_y, width, height
-                )
+            entry_x, entry_y, exit_x, exit_y, width, height
+        )
 
         perfect = config_dict["PERFECT"].lower()
         if perfect not in ("true", "false"):
@@ -121,54 +131,75 @@ def check_key_value_element(config_dict):
         if not output_file:
             raise ValueError("OUTPUT_FILE cannot be empty")
         if " " in output_file:
-            raise ValueError(f"OUTPUT_FILE must be a single name "
-                             f"without spaces -> {output_file}")
+            raise ValueError(
+                "OUTPUT_FILE must be a single name without spaces "
+                f"-> {output_file}"
+            )
         if not output_file.endswith(".txt"):
-            raise ValueError(f"OUTPUT_FILE must end with .txt "
-                             f"-> {output_file}")
+            raise ValueError(
+                f"OUTPUT_FILE must end with .txt -> {output_file}"
+            )
 
-    except KeyError as ke:
-        print(f"\nkey error : {ke}")
+        return {
+            "WIDTH": width,
+            "HEIGHT": height,
+            "ENTRY": entry,
+            "EXIT": exit_,
+            "OUTPUT_FILE": output_file,
+            "PERFECT": perfect,
+            "SEED": seed,
+        }
+
+    except KeyError as exc:
+        print(f"\nkey error : {exc}")
         sys.exit(1)
-    except ValueError as Va:
-        print(f"\nValueError: {Va}")
+    except ValueError as exc:
+        print(f"\nValueError: {exc}")
         sys.exit(1)
-    except Exception as Ex:
-        print(f"\nException error2: {Ex}")
+    except Exception as exc:
+        print(f"\nException error2: {exc}")
+        sys.exit(1)
 
 
-def check_entry_exit_42(entry, exit, lst1, lst2):
+def check_entry_exit_42(
+    entry: tuple[int, int],
+    exit_: tuple[int, int],
+    lst1: list[tuple[int, int]],
+    lst2: list[tuple[int, int]],
+) -> None:
+    """Ensure entry and exit are not in forbidden 42 coordinates."""
     try:
         if entry in lst1 or entry in lst2:
             raise ValueError("entry in 42")
-        if exit in lst1 or exit in lst2:
+        if exit_ in lst1 or exit_ in lst2:
             raise ValueError("exit in 42")
-    except ValueError as EnEx42:
-        print("check 42:", EnEx42)
+    except ValueError as exc:
+        print("check 42:", exc)
         sys.exit(1)
 
 
-def config_parser():
+def config_parser() -> MazeGenerator:
+    """Parse config file and return a validated MazeGenerator instance."""
     try:
         content = check_arg_and_file_exist_and_return_it()
         lines = return_content_as_lines(content)
-        ma_dict = get_config_dict(lines)
-        check_key_value_element(ma_dict)
+        raw_dict = get_config_dict(lines)
+        cfg = check_key_value_element(raw_dict)
 
-        maze = MazeGenerator(        
-            width = ma_dict["WIDTH"],
-            height = ma_dict["HEIGHT"],
-            entry = ma_dict["ENTRY"],
-            exit = ma_dict["EXIT"],
-            output_file = ma_dict["OUTPUT_FILE"],
-            perfect = ma_dict["PERFECT"],
-            seed = ma_dict.get("SEED")
+        maze = MazeGenerator(
+            width=cfg["WIDTH"],
+            height=cfg["HEIGHT"],
+            entry=cfg["ENTRY"],
+            exit=cfg["EXIT"],
+            output_file=cfg["OUTPUT_FILE"],
+            perfect=cfg["PERFECT"],
+            seed=cfg["SEED"],
         )
         lst1, lst2 = maze.find_42()
         check_entry_exit_42(maze.entry, maze.exit, lst1, lst2)
 
         maze.mark_42()
         return maze
-    except Exception as e:
-        print("who knows:", e)
+    except Exception as exc:
+        print(exc)
         sys.exit(1)

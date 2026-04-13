@@ -2,7 +2,7 @@ ENTrY = 0,1
 
 EXIT = 9,9
 OuTPUT_FILE = maze.txt
-PERFECT = false
+PERFECT = true
 		
 WIDTH = 40
 

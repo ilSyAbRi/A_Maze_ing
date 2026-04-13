@@ -1,21 +1,39 @@
 from Cell import Cell
 import random
+import sys
+from collections import deque
 from enum import Enum
+
+Coordinate = tuple[int, int]
+Step = tuple[int, int, str]
 
 
 class Colors(Enum):
-    BLACK =  0xFF000000
-    GREEN =  0xff0a9f2c
-    PURPLE = 0xFF4a0cde
+    """Define available RGBA color constants."""
+    BLACK = 0xFF000000
+    GREEN = 0xFF0A9F2C
+    PURPLE = 0xFF4A0CDE
     YELLOW = 0xFFFFD700
     ORANGE = 0xFFFFA500
-    WHITE = 0XFe6dbdfF
-    BLUE = 0xff2b6cfb 
-    PINK = 0xffcb0cdf
+    WHITE = 0xFE6DBDFF
+    BLUE = 0xFF2B6CFB
+    PINK = 0xFFCB0CDF
 
 
 class MazeGenerator:
-    def __init__(self, width, height, entry, exit, output_file, seed, perfect):
+    """Generate, solve, and export maze data."""
+
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        entry: Coordinate,
+        exit: Coordinate,
+        output_file: str,
+        seed: int | None,
+        perfect: str,
+    ) -> None:
+        """Initialize maze settings and internal grid state."""
         self.width = width
         self.height = height
         self.entry = entry
@@ -23,13 +41,16 @@ class MazeGenerator:
         self.output_file = output_file
         self.seed = seed
         self.perfect = perfect
-        self.grid = [[ Cell() for _ in range(width)] for  _ in range(height)]
+        self.grid: list[list[Cell]] = [
+            [Cell() for _ in range(width)] for _ in range(height)
+        ]
         self.cell_size = self.calculate_cell_size(width, height)
         self.color = Colors.PINK.value
 
     @staticmethod
-    def calculate_cell_size(width, height):
-        adjust_width = 1920 // width 
+    def calculate_cell_size(width: int, height: int) -> int:
+        """Compute pixel size per cell from maze dimensions."""
+        adjust_width = 1920 // width
         adjust_height = 1080 // height
         if (width * height) < 100:
             return min(adjust_width, adjust_height) - 40
@@ -39,163 +60,148 @@ class MazeGenerator:
             return min(adjust_width, adjust_height) - 2
         return min(adjust_width, adjust_height)
 
-    def find_42(self):
+    def find_42(self) -> tuple[list[Coordinate], list[Coordinate]]:
+        """Return coordinate sets that draw the 42 marker."""
         center = (self.width // 2, self.height // 2)
-        lst4 = [
-            (center[0] - 1, center[1]), (center[0] - 2, center[1]), (center[0] - 3, center[1]),
-            (center[0] - 3, center[1] - 1), (center[0] - 3, center[1] - 2),
-            (center[0] - 1, center[1] + 1), (center[0] -1, center[1] + 2)
+        lst4: list[Coordinate] = [
+            (center[0] - 1, center[1]),
+            (center[0] - 2, center[1]),
+            (center[0] - 3, center[1]),
+            (center[0] - 3, center[1] - 1),
+            (center[0] - 3, center[1] - 2),
+            (center[0] - 1, center[1] + 1),
+            (center[0] - 1, center[1] + 2),
         ]
-        lst2 = [
-            (center[0] + 1, center[1]), (center[0] + 2, center[1]), (center[0] + 3, center[1]),
-            (center[0] + 3, center[1] - 1), (center[0] + 3, center[1] - 2), 
-            (center[0] + 3, center[1] - 2), 
-            (center[0] + 2, center[1] - 2) ,(center[0] + 1, center[1] - 2),
-            (center[0] + 1, center[1] + 1), (center[0] + 1, center[1] + 2),
-            (center[0] + 2, center[1] + 2) , (center[0] + 3 ,center[1] + 2)
+        lst2: list[Coordinate] = [
+            (center[0] + 1, center[1]),
+            (center[0] + 2, center[1]),
+            (center[0] + 3, center[1]),
+            (center[0] + 3, center[1] - 1),
+            (center[0] + 3, center[1] - 2),
+            (center[0] + 3, center[1] - 2),
+            (center[0] + 2, center[1] - 2),
+            (center[0] + 1, center[1] - 2),
+            (center[0] + 1, center[1] + 1),
+            (center[0] + 1, center[1] + 2),
+            (center[0] + 2, center[1] + 2),
+            (center[0] + 3, center[1] + 2),
         ]
         return lst4, lst2
 
-    def mark_42(self):
+    def mark_42(self) -> None:
+        """Mark 42 cells as visited in the current grid."""
         lst4, lst2 = self.find_42()
         for y, row in enumerate(self.grid):
             for x, cell in enumerate(row):
-                if (x,y) in lst4 or (x,y) in lst2:
+                if (x, y) in lst4 or (x, y) in lst2:
                     cell.visited = True
 
-    def get_unvisited_neighbors(self, row, col):
-        neighbors = []
-
-        #UP
+    def get_unvisited_neighbors(self, row: int, col: int) -> list[Step]:
+        """Return unvisited neighbor cells with movement directions."""
+        neighbors: list[Step] = []
         if row > 0 and not self.grid[row - 1][col].visited:
             neighbors.append((row - 1, col, "N"))
-        #Down
         if row < self.height - 1 and not self.grid[row + 1][col].visited:
             neighbors.append((row + 1, col, "S"))
-        #Left
         if col > 0 and not self.grid[row][col - 1].visited:
             neighbors.append((row, col - 1, "W"))
-        #Right
         if col < self.width - 1 and not self.grid[row][col + 1].visited:
             neighbors.append((row, col + 1, "E"))
-
         return neighbors
 
-
-
-    def get_right_wall_neighbors(self, row, col):
-        neighbors = []
-
-        if row > 0 and self.grid[row][col].north == False:
+    def get_right_wall_neighbors(self, row: int, col: int) -> list[Step]:
+        """Return reachable neighbors through opened walls."""
+        neighbors: list[Step] = []
+        if row > 0 and self.grid[row][col].north is False:
             neighbors.append((row - 1, col, "N"))
-
-        if row < self.height - 1 and self.grid[row][col].south == False:
+        if row < self.height - 1 and self.grid[row][col].south is False:
             neighbors.append((row + 1, col, "S"))
-
-        if col > 0 and self.grid[row][col].west == False:
+        if col > 0 and self.grid[row][col].west is False:
             neighbors.append((row, col - 1, "W"))
-
-        if col < self.width - 1 and self.grid[row][col].east == False:
+        if col < self.width - 1 and self.grid[row][col].east is False:
             neighbors.append((row, col + 1, "E"))
-
         return neighbors
 
-
-    def return_to_true_mark(self):
-        # top row top wall
+    def return_to_true_mark(self) -> None:
+        """Restore border walls after imperfect carving."""
         for j in range(self.width):
             self.grid[0][j].north = True
-
-        # bottom row bottom wall
         for j in range(self.width):
             self.grid[self.height - 1][j].south = True
-
-        # left column left wall
         for i in range(self.height):
             self.grid[i][0].west = True
-
-        # right column right wall
         for i in range(self.height):
             self.grid[i][self.width - 1].east = True
 
-
-
-    def mark_path_for_imperfect(self):
-
+    def mark_path_for_imperfect(self) -> None:
+        """Reset visits and reapply protected cells and border walls."""
         for i in range(self.height):
             for j in range(self.width):
                 self.grid[i][j].visited = False
 
         self.mark_42()
 
-        # top row top wall
         for j in range(self.width):
             self.grid[0][j].north = True
-
-        # bottom row bottom wall
         for j in range(self.width):
             self.grid[self.height - 1][j].south = True
-
-        # left column left wall
         for i in range(self.height):
             self.grid[i][0].west = True
-
-        # right column right wall
         for i in range(self.height):
             self.grid[i][self.width - 1].east = True
 
-
-    def check_cell_and_wall_for_imperfect(self, row, col, next_row, next_col):
-
-        if self.grid[row][col].visited == True:
+    def check_cell_and_wall_for_imperfect(
+        self,
+        row: int,
+        col: int,
+        next_row: int,
+        next_col: int,
+    ) -> bool:
+        """Check whether both cells can lose one wall safely."""
+        if self.grid[row][col].visited:
             return False
 
-        current_north = self.grid[row][col].north
-        current_south = self.grid[row][col].south
-        current_east = self.grid[row][col].east
-        current_west = self.grid[row][col].west
+        current_walls = [
+            self.grid[row][col].north,
+            self.grid[row][col].south,
+            self.grid[row][col].east,
+            self.grid[row][col].west,
+        ]
+        next_walls = [
+            self.grid[next_row][next_col].north,
+            self.grid[next_row][next_col].south,
+            self.grid[next_row][next_col].east,
+            self.grid[next_row][next_col].west,
+        ]
 
-        next_north = self.grid[next_row][next_col].north
-        next_south = self.grid[next_row][next_col].south
-        next_east = self.grid[next_row][next_col].east
-        next_west = self.grid[next_row][next_col].west
+        return current_walls.count(True) > 1 and next_walls.count(True) > 1
 
-        current_walls = [current_north, current_south, current_east, current_west]
-        next_walls = [next_north, next_south, next_east, next_west]
-
-        count_current_walls = current_walls.count(True)
-        count_next_walls = next_walls.count(True)
-
-        if count_current_walls > 1 and count_next_walls > 1:
-            return True
-        else:
-            return False
-
-
-
-    def check_and_break_direction(self, row, col, direction, nx, ny):
-        
+    def check_and_break_direction(
+        self,
+        row: int,
+        col: int,
+        direction: str,
+        nx: int,
+        ny: int,
+    ) -> None:
+        """Break matching walls for two adjacent cells by direction."""
         if direction == "N":
             self.grid[row][col].north = False
             self.grid[nx][ny].south = False
-
         elif direction == "S":
             self.grid[row][col].south = False
             self.grid[nx][ny].north = False
-
         elif direction == "E":
             self.grid[row][col].east = False
             self.grid[nx][ny].west = False
-
         elif direction == "W":
             self.grid[row][col].west = False
             self.grid[nx][ny].east = False
 
-
-
-    def generate_maze(self):
-        stack = [self.entry]
-        path = []
+    def generate_maze(self) -> list[Step]:
+        """Generate maze passages and optionally add imperfect cycles."""
+        stack: list[Coordinate] = [self.entry]
+        path: list[Step] = []
 
         row, col = self.entry
         self.grid[row][col].visited = True
@@ -216,54 +222,50 @@ class MazeGenerator:
                 stack.pop()
 
         if self.perfect.lower() == "false":
-
             self.mark_path_for_imperfect()
             wall_to_break = self.height * self.width // 20
-            numberoftry = 10000000000
-            while wall_to_break and not numberoftry == 0:
+            number_of_try = 10_000_000_000
+            while wall_to_break and number_of_try != 0:
                 row = random.randint(0, self.height - 1)
                 col = random.randint(0, self.width - 1)
                 neighbors = self.get_unvisited_neighbors(row, col)
                 if neighbors:
                     nx, ny, direction = random.choice(neighbors)
-                    if self.check_cell_and_wall_for_imperfect(row, col, nx, ny):
-                        self.check_and_break_direction(row, col, direction, nx, ny)
+                    if self.check_cell_and_wall_for_imperfect(
+                        row, col, nx, ny
+                    ):
+                        self.check_and_break_direction(
+                            row, col, direction, nx, ny
+                            )
                         path.append((row, col, direction))
                         wall_to_break -= 1
-                numberoftry -=1
+                number_of_try -= 1
             self.return_to_true_mark()
 
         return path
 
-    """
-    1. not visited → ok
-    2. mark visited
-    3. add to queue
-    4. remember how we got there
-    """
-
-    def solve_maze(self):
+    def solve_maze(self) -> list[Step]:
+        """Solve the maze from entry to exit using BFS."""
         start = self.entry
         end = self.exit
 
-        queue = [start]
-        visited = [start]
-        came_from = {}
-        path = []
+        queue: deque[Coordinate] = deque([start])
+        visited: set[Coordinate] = {start}
+        came_from: dict[Coordinate, tuple[Coordinate, str]] = {}
+        path: list[Step] = []
 
         while queue:
-            row, col = queue.pop(0)
+            row, col = queue.popleft()
             current = (row, col)
 
             neighbors = self.get_right_wall_neighbors(row, col)
-
             for nx, ny, direction in neighbors:
                 new = (nx, ny)
-
                 if new not in visited:
-                    visited.append(new)
+                    visited.add(new)
                     queue.append(new)
                     came_from[new] = (current, direction)
+
             if current == end:
                 break
 
@@ -274,46 +276,44 @@ class MazeGenerator:
             current = prev
 
         path.reverse()
-        return(path)
-    
+        return path
 
-    def from_bool_to_decimal(self, row, col):
+    def from_bool_to_decimal(self, row: int, col: int) -> int:
+        """Convert a cell wall state into its hexadecimal nibble value."""
         add = 0
         if self.grid[row][col].north:
             add += 0b0001
-
         if self.grid[row][col].south:
             add += 0b0010
-
         if self.grid[row][col].east:
             add += 0b0100
-
         if self.grid[row][col].west:
             add += 0b1000
-
         return add
 
-    def generate_output_file(self, path):
+    def generate_output_file(self, path: list[Step]) -> None:
+        """Write maze grid, points, and solution path to the output file."""
         try:
-            with open(self.output_file, "w") as f:
-
+            with open(self.output_file, "w", encoding="utf-8") as file:
                 for i in range(self.height):
                     line = ""
                     for j in range(self.width):
                         value = self.from_bool_to_decimal(i, j)
                         line += format(value, "X")
-                    f.write(line + "\n")
+                    file.write(line + "\n")
 
-                f.write("\n")
-
-                f.write(f"{self.entry[0]}, {self.entry[1]}\n")
-                f.write(f"{self.exit[0]}, {self.exit[1]}\n")
+                file.write("\n")
+                file.write(
+                    f"{self.entry[0]}, {self.entry[1]}\n"
+                )
+                file.write(
+                    f"{self.exit[0]}, {self.exit[1]}\n"
+                )
 
                 path_str = ""
                 for _, _, direction in path:
                     path_str += direction
-                f.write(path_str + "\n")
-
-        except Exception as e:
-            print("generation file", e)
+                file.write(path_str + "\n")
+        except Exception as exc:
+            print("generation file", exc)
             sys.exit(1)
