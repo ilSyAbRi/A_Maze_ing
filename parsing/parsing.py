@@ -128,6 +128,8 @@ def check_key_value_element(config_dict: dict[str, str]) -> ParsedConfig:
             raise ValueError("PERFECT must be True or False")
 
         output_file = config_dict["OUTPUT_FILE"].strip()
+        if output_file == "config.txt":
+            raise ValueError("move config.txt from config file as ouput file")
         if not output_file:
             raise ValueError("OUTPUT_FILE cannot be empty")
         if " " in output_file:
