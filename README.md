@@ -75,7 +75,8 @@ Roles
         MLX visualization, rendering, animations, menu, Makefile, packaging
         take input from the legend to display a beautiful maze
 
-    ilsyabri(the legend): DFS generation, BFS solving, imperfect maze, parsing, output file
+    ilsyabri(the legend): 
+    DFS generation, BFS solving, imperfect maze, parsing, output file
         make input perfect and easy for use by the leader to display
 
 Planning
