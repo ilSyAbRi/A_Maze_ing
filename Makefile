@@ -7,11 +7,13 @@ CONF_FILE = config.txt
 MAIN_FILE = a_maze_ing.py
 MLX_WHEEL = mlx-2.2-py3-none-any.whl
 
+all: run
+
 install:
 	$(PIP) install $(FLAKE8) $(MYPY)
 	$(PIP) install $(MLX_WHEEL)
 
-run:
+run: install
 	$(PYTHON) $(MAIN_FILE) $(CONF_FILE)
 
 debug:
@@ -20,6 +22,7 @@ debug:
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name "mypy_cache" -exec rm -rf {} +
+	
 lint: install
 	$(FLAKE8) . --exclude $(VENV)
 	$(MYPY) . \
