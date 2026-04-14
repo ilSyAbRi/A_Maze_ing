@@ -15,7 +15,7 @@ It generates a random maze from a config file, solves it using BFS, and supports
 ```bash
 make install
 make run
-
+```
 or
 
 python3 a_maze_ing.py config.txt
@@ -71,9 +71,13 @@ The generator is implemented in a reusable class:
 👥 Team & Management
 Roles
 
-    ibet-lot: MLX visualization, rendering, animations, menu, Makefile, packaging
+    ibet-lot (Leader and the structer): 
+        MLX visualization, rendering, animations, menu, Makefile, packaging
+        take input from the legend to display a beautiful maze
 
-    ilsyabri: DFS generation, BFS solving, imperfect maze, parsing, output file
+    ilsyabri(the legend): 
+    DFS generation, BFS solving, imperfect maze, parsing, output file
+        make input perfect and easy for use by the leader to display
 
 Planning
 
