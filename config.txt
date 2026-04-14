@@ -8,4 +8,4 @@ WIDTH = 40
 
 HEIGHT = 40
 
-#SEED = 42
+SEED = 42
