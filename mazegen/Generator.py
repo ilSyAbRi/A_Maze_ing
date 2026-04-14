@@ -58,7 +58,9 @@ class MazeGenerator:
             return min(adjust_width, adjust_height) - 40
         if (width * height) < 1000:
             return min(adjust_width, adjust_height) - 10
-        if (width * height) < 5000:
+        # if (width * height) < 5000:
+        #     return min(adjust_width, adjust_height) - 2
+        if (width * height) < 10000:
             return min(adjust_width, adjust_height) - 2
         return min(adjust_width, adjust_height)
 
