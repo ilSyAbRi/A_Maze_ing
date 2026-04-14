@@ -284,9 +284,9 @@ class MazeGenerator:
         add = 0
         if self.grid[row][col].north:
             add += 0b0001
-        if self.grid[row][col].south:
-            add += 0b0010
         if self.grid[row][col].east:
+            add += 0b0010
+        if self.grid[row][col].south:
             add += 0b0100
         if self.grid[row][col].west:
             add += 0b1000
